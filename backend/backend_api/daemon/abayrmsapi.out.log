@@ -1,0 +1,238 @@
+Test Log log..
+Server is running on port 3001
+Database connected successfully :) !
+undefined
+{
+  message: 'SUCCESS',
+  username: 'chalie',
+  userid: '5925',
+  email: '',
+  is_active: '1',
+  created: '2023-03-16 06:10:55',
+  first_name: 'Challelign',
+  middle_name: 'Tilahun',
+  branch: 'H/Office Information Technology Department',
+  branch_id: '118',
+  branch_code: '102',
+  branch_region: 'Head Office',
+  branch_type: 'BR',
+  position: 'Junior Programmer',
+  grade: 6,
+  Group: {
+    Employee: [
+      'holidays:index',
+      'holidays:add',
+      'holidays:cancel',
+      'jobs:index3',
+      'applications:*',
+      'employees:index5',
+      'employee_performances:*',
+      'ims/ims_requisitions:index_1',
+      'ims/ims_sirvs:index_1',
+      'orms/orms_loss_datas:index_1',
+      'ims/ims_cards:branch_card_individual',
+      'mis/mis_letter_details:index',
+      'fms/fms_requisitions:index_request',
+      'ims/ims_maintenance_requests:index',
+      'ims/ims_cards:emp_card2',
+      'cms/cms_cases:*',
+      'dms/dms_documents:*',
+      'shift_requests:index',
+      'ho_performance_plans:ho_my_performance_report'
+    ],
+    'Super Administrator': [ '*' ]
+  }
+}
+branch codeeee102
+Autorazation
+search input is false
+Autorazation
+false found
+search input is false
+Autorazation
+false found
+Autorazation
+SELECT * FROM dormant_accounts_below_100 WHERE customer_branch = ? ORDER BY id DESC LIMIT 0, 6 102
+[
+  RowDataPacket {
+    id: 103,
+    user_ID: '5925',
+    customer_branch: '102',
+    customer_name: 'WOYNSHET  SHIFERAW TADESSE  ',
+    account_number: '1029115562478016',
+    customer_contact: 'A.A ZONE KALITY WEREDA 05 HOUSE NO-351/44092235191',
+    action: 0,
+    reason: 'dormant_accounts_reason.reasons',
+    remark: 'dormant_accounts_reason.remark',
+    other_reason: 'dormant_accounts_reason.other_reason',
+    responded: 1,
+    current_status: '',
+    created_at: 2020-11-30T20:02:09.000Z,
+    updated_at: 2023-05-12T10:33:46.000Z
+  },
+  RowDataPacket {
+    id: 80,
+    user_ID: '5925',
+    customer_branch: '102',
+    customer_name: 'HULUMTAYE BEKELE KASSAYE',
+    account_number: '1021015562468012',
+    customer_contact: 'A.A ZONE KIRKOS WEREDA 04 HOUSE NO-5070911160480',
+    action: 2,
+    reason: '3',
+    remark: 'Test Update',
+    other_reason: 'new Update',
+    responded: 1,
+    current_status: '',
+    created_at: 2020-11-30T20:02:08.000Z,
+    updated_at: 2023-05-17T09:56:04.000Z
+  },
+  RowDataPacket {
+    id: 45,
+    user_ID: '5925',
+    customer_branch: '102',
+    customer_name: 'ESUBALEW YITAYAL (PLATINIUM ENGINERING)',
+    account_number: '1022015562465018',
+    customer_contact: 'A.A GULELE SUB CITY W-08+251911234684',
+    action: 2,
+    reason: '3',
+    remark: '',
+    other_reason: 'kjijh',
+    responded: 1,
+    current_status: '',
+    created_at: 2020-11-30T20:02:07.000Z,
+    updated_at: 2023-05-17T07:44:19.000Z
+  },
+  RowDataPacket {
+    id: 16,
+    user_ID: '5925',
+    customer_branch: '102',
+    customer_name: 'GASHAW BIRHANU G/EGIEABEHER',
+    account_number: '1021015562438011',
+    customer_contact: '0985252291AMARA REGINAL STATE',
+    action: 2,
+    reason: '2',
+    remark: 'uh',
+    other_reason: 'jkhkjh',
+    responded: 1,
+    current_status: '',
+    created_at: 2020-11-30T20:02:06.000Z,
+    updated_at: 2023-05-17T07:46:14.000Z
+  },
+  { countRow: 4 }
+]
+SELECT * FROM dormant_accounts WHERE customer_branch = ? ORDER BY id DESC LIMIT 0, 6
+Autorazation
+[
+  RowDataPacket {
+    id: 141323,
+    user_ID: '',
+    customer_branch: '102',
+    customer_name: 'GIRMA DADI WERDAFA/DERBA',
+    account_number: '1021010003164017',
+    customer_contact: 'WOLENKONI  KEB. 02 HNO. 315TEL.  09 11 35 31 27 ',
+    action: 0,
+    reason: null,
+    remark: null,
+    other_reason: '',
+    responded: 0,
+    current_status: '',
+    created_at: 2020-11-30T20:56:48.000Z,
+    updated_at: '0000-00-00 00:00:00'
+  },
+  RowDataPacket {
+    id: 141321,
+    user_ID: '',
+    customer_branch: '102',
+    customer_name: 'DAWIT GETACHEW SEREBE',
+    account_number: '1021010003165031',
+    customer_contact: 'A.A. KOLEFE S.C. KB 4 H.NO 31990913-58-75-16 OR 09',
+    action: 0,
+    reason: null,
+    remark: null,
+    other_reason: '',
+    responded: 0,
+    current_status: '',
+    created_at: 2020-11-30T20:56:48.000Z,
+    updated_at: '0000-00-00 00:00:00'
+  },
+  RowDataPacket {
+    id: 141309,
+    user_ID: '',
+    customer_branch: '102',
+    customer_name: 'TIGEST HAYLEYSUS AWOKE',
+    account_number: '1021711100326012',
+    customer_contact: 'F/SELAM920768617FINOT SELAMFINOTESELAM',
+    action: 0,
+    reason: null,
+    remark: null,
+    other_reason: '',
+    responded: 0,
+    current_status: '',
+    created_at: 2020-11-30T20:56:47.000Z,
+    updated_at: '0000-00-00 00:00:00'
+  },
+  RowDataPacket {
+    id: 141294,
+    user_ID: '',
+    customer_branch: '102',
+    customer_name: 'KALEB GEZAHEGEN MAMO',
+    account_number: '1021010003166012',
+    customer_contact: '0911152136WOLENKONI  KEB. 02 HNO. 3150911 15 21 36',
+    action: 0,
+    reason: null,
+    remark: null,
+    other_reason: '',
+    responded: 0,
+    current_status: '',
+    created_at: 2020-11-30T20:56:47.000Z,
+    updated_at: '0000-00-00 00:00:00'
+  },
+  RowDataPacket {
+    id: 141293,
+    user_ID: '',
+    customer_branch: '102',
+    customer_name: 'SEMIRA SAID HUSEN',
+    account_number: '1021010003167015',
+    customer_contact: '0923051517BOLE KB 14/15 0923 05 15 17',
+    action: 0,
+    reason: null,
+    remark: null,
+    other_reason: '',
+    responded: 0,
+    current_status: '',
+    created_at: 2020-11-30T20:56:47.000Z,
+    updated_at: '0000-00-00 00:00:00'
+  },
+  RowDataPacket {
+    id: 141291,
+    user_ID: '',
+    customer_branch: '102',
+    customer_name: 'SAMUEL G/EYESUS TESFAYE',
+    account_number: '1021010003172015',
+    customer_contact: '0911214582KOMBOLCHA K 05 0911 21 45 82/0923 688668',
+    action: 0,
+    reason: null,
+    remark: null,
+    other_reason: '',
+    responded: 0,
+    current_status: '',
+    created_at: 2020-11-30T20:56:47.000Z,
+    updated_at: '0000-00-00 00:00:00'
+  },
+  { countRow: 651 }
+]
+search input is false
+Autorazation
+false found
+search input is false
+requesting.. 
+search input is false
+Autorazation
+false found
+false found
+search input is false
+Autorazation
+false found
+Test Log log..
+Server is running on port 3001
+Database connected successfully :) !

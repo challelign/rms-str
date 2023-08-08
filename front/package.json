@@ -1,0 +1,60 @@
+{
+  "name": "abay-rms",
+  "version": "0.1.0",
+  "homepage": "http://localhost/rms2/",
+  "private": true,
+  "dependencies": {
+    "@material-ui/core": "^4.12.4",
+    "@material-ui/icons": "^4.11.3",
+    "@material-ui/lab": "^4.0.0-alpha.61",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^0.27.2",
+    "chart.js": "^4.2.1",
+    "formik": "^2.2.9",
+    "http": "^0.0.1-security",
+    "react": "^18.0.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-data-table-component": "^7.5.3",
+    "react-dom": "^18.0.0",
+    "react-feather": "^2.0.10",
+    "react-helmet": "^6.1.0",
+    "react-perfect-scrollbar": "^1.5.8",
+    "react-proxy": "^1.1.8",
+    "react-router-dom": "^6.4.1",
+    "react-scripts": "^5.0.1",
+    "reactjs-popup": "^2.0.5",
+    "styled-components": "^5.3.9",
+    "web-vitals": "^2.1.4",
+    "yup": "^1.1.1"
+  },
+  "browser": {
+    "http": false,
+    "https": false
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

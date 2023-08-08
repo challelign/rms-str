@@ -1,0 +1,32 @@
+2023-06-13 11:09:24 - Starting C:\Program Files\nodejs\node.exe  --harmony D:\projects\rms\abay-rms\backend\backend_api\node_modules\node-windows\lib\wrapper.js --file D:\projects\rms\abay-rms\backend\backend_api\server.js --scriptoptions= --log "Abay RMS API wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2023-06-13 11:09:24 - Started 19508
+2023-06-13 11:14:38 - Stopping abayrmsapi.exe
+2023-06-13 11:14:38 - ProcessKill 19508
+2023-06-13 11:14:39 - Found child process: 20348 Name: conhost.exe
+2023-06-13 11:14:39 - Found child process: 17788 Name: node.exe
+2023-06-13 11:14:39 - Stopping process 20348
+2023-06-13 11:14:39 - Send SIGINT 20348
+2023-06-13 11:14:39 - SIGINT to 20348 failed - Killing as fallback
+2023-06-13 11:14:39 - Stopping process 17788
+2023-06-13 11:14:39 - Send SIGINT 17788
+2023-06-13 11:14:39 - SIGINT to 17788 failed - Killing as fallback
+2023-06-13 11:14:39 - Stopping process 19508
+2023-06-13 11:14:39 - Send SIGINT 19508
+2023-06-13 11:14:39 - SIGINT to 19508 failed - Killing as fallback
+2023-06-13 11:14:39 - Finished abayrmsapi.exe
+2023-06-13 11:17:14 - Starting C:\Program Files\nodejs\node.exe  --harmony D:\projects\rms\abay-rms\backend\backend_api\node_modules\node-windows\lib\wrapper.js --file D:\projects\rms\abay-rms\backend\backend_api\server.js --scriptoptions= --log "Abay RMS API wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2023-06-13 11:17:14 - Started 20980
+2023-06-13 11:19:44 - Stopping abayrmsapi.exe
+2023-06-13 11:19:44 - ProcessKill 20980
+2023-06-13 11:19:44 - Found child process: 19860 Name: conhost.exe
+2023-06-13 11:19:44 - Found child process: 19648 Name: node.exe
+2023-06-13 11:19:44 - Stopping process 19860
+2023-06-13 11:19:44 - Send SIGINT 19860
+2023-06-13 11:19:44 - SIGINT to 19860 failed - Killing as fallback
+2023-06-13 11:19:44 - Stopping process 19648
+2023-06-13 11:19:44 - Send SIGINT 19648
+2023-06-13 11:19:44 - SIGINT to 19648 failed - Killing as fallback
+2023-06-13 11:19:44 - Stopping process 20980
+2023-06-13 11:19:44 - Send SIGINT 20980
+2023-06-13 11:19:44 - SIGINT to 20980 failed - Killing as fallback
+2023-06-13 11:19:44 - Finished abayrmsapi.exe

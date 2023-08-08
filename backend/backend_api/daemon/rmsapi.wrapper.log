@@ -1,0 +1,32 @@
+2023-06-13 11:23:36 - Starting C:\Program Files\nodejs\node.exe  --harmony D:\projects\rms\abay-rms\backend\backend_api\node_modules\node-windows\lib\wrapper.js --file D:\projects\rms\abay-rms\backend\backend_api\server.js --scriptoptions= --log "RMS API wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2023-06-13 11:23:36 - Started 18476
+2023-06-13 11:27:11 - Stopping rmsapi.exe
+2023-06-13 11:27:11 - ProcessKill 18476
+2023-06-13 11:27:18 - Shutdown exception
+Message:Class not registered
+
+Stacktrace:   at System.Runtime.InteropServices.Marshal.ThrowExceptionForHRInternal(Int32 errorCode, IntPtr errorInfo)
+   at System.Management.ManagementScope.InitializeGuts(Object o)
+   at System.Management.ManagementScope.Initialize()
+   at System.Management.ManagementObjectSearcher.Initialize()
+   at System.Management.ManagementObjectSearcher.Get()
+   at winsw.WrapperService.GetChildPids(Int32 pid)
+   at winsw.WrapperService.StopProcessAndChildren(Int32 pid)
+   at winsw.WrapperService.StopIt()
+   at winsw.WrapperService.OnShutdown()
+2023-06-13 11:29:50 - Starting C:\Program Files\nodejs\node.exe  --harmony D:\projects\rms\abay-rms\backend\backend_api\node_modules\node-windows\lib\wrapper.js --file D:\projects\rms\abay-rms\backend\backend_api\server.js --scriptoptions= --log "RMS API wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2023-06-13 11:29:50 - Started 8416
+2023-06-13 13:09:30 - Stopping rmsapi.exe
+2023-06-13 13:09:30 - ProcessKill 8416
+2023-06-13 13:09:30 - Found child process: 8464 Name: conhost.exe
+2023-06-13 13:09:30 - Found child process: 8764 Name: node.exe
+2023-06-13 13:09:30 - Stopping process 8464
+2023-06-13 13:09:30 - Send SIGINT 8464
+2023-06-13 13:09:30 - SIGINT to 8464 failed - Killing as fallback
+2023-06-13 13:09:30 - Stopping process 8764
+2023-06-13 13:09:30 - Send SIGINT 8764
+2023-06-13 13:09:30 - SIGINT to 8764 failed - Killing as fallback
+2023-06-13 13:09:30 - Stopping process 8416
+2023-06-13 13:09:30 - Send SIGINT 8416
+2023-06-13 13:09:30 - SIGINT to 8416 failed - Killing as fallback
+2023-06-13 13:09:30 - Finished rmsapi.exe

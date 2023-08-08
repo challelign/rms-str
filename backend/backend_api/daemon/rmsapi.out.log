@@ -1,0 +1,126 @@
+Test Log log..
+Server is running on port 3001
+Database connected successfully :) !
+undefined
+{
+  message: 'SUCCESS',
+  username: 'chalie',
+  userid: '5925',
+  email: '',
+  is_active: '1',
+  created: '2023-03-16 06:10:55',
+  first_name: 'Challelign',
+  middle_name: 'Tilahun',
+  branch: 'H/Office Information Technology Department',
+  branch_id: '118',
+  branch_code: '102',
+  branch_region: 'Head Office',
+  branch_type: 'BR',
+  position: 'Junior Programmer',
+  grade: 6,
+  Group: {
+    Employee: [
+      'holidays:index',
+      'holidays:add',
+      'holidays:cancel',
+      'jobs:index3',
+      'applications:*',
+      'employees:index5',
+      'employee_performances:*',
+      'ims/ims_requisitions:index_1',
+      'ims/ims_sirvs:index_1',
+      'orms/orms_loss_datas:index_1',
+      'ims/ims_cards:branch_card_individual',
+      'mis/mis_letter_details:index',
+      'fms/fms_requisitions:index_request',
+      'ims/ims_maintenance_requests:index',
+      'ims/ims_cards:emp_card2',
+      'cms/cms_cases:*',
+      'dms/dms_documents:*',
+      'shift_requests:index',
+      'ho_performance_plans:ho_my_performance_report'
+    ],
+    'Super Administrator': [ '*' ]
+  }
+}
+branch codeeee102
+Autorazation
+search input is false
+Autorazation
+false found
+Autorazation
+Test Log log..
+Server is running on port 3001
+Database connected successfully :) !
+Database connected successfully :) !
+Database connected successfully :) !
+Database connected successfully :) !
+Database connected successfully :) !
+Database connected successfully :) !
+Database connected successfully :) !
+Database connected successfully :) !
+Database connected successfully :) !
+Database connected successfully :) !
+Database connected successfully :) !
+Database connected successfully :) !
+Database connected successfully :) !
+Database connected successfully :) !
+Database connected successfully :) !
+Database connected successfully :) !
+Database connected successfully :) !
+Database connected successfully :) !
+Test Log log..
+Server is running on port 3001
+Database connected successfully :) !
+undefined
+{
+  message: 'SUCCESS',
+  username: 'chalie',
+  userid: '5925',
+  email: '',
+  is_active: '1',
+  created: '2023-03-16 06:10:55',
+  first_name: 'Challelign',
+  middle_name: 'Tilahun',
+  branch: 'H/Office Information Technology Department',
+  branch_id: '118',
+  branch_code: '102',
+  branch_region: 'Head Office',
+  branch_type: 'BR',
+  position: 'Junior Programmer',
+  grade: 6,
+  Group: {
+    Employee: [
+      'holidays:index',
+      'holidays:add',
+      'holidays:cancel',
+      'jobs:index3',
+      'applications:*',
+      'employees:index5',
+      'employee_performances:*',
+      'ims/ims_requisitions:index_1',
+      'ims/ims_sirvs:index_1',
+      'orms/orms_loss_datas:index_1',
+      'ims/ims_cards:branch_card_individual',
+      'mis/mis_letter_details:index',
+      'fms/fms_requisitions:index_request',
+      'ims/ims_maintenance_requests:index',
+      'ims/ims_cards:emp_card2',
+      'cms/cms_cases:*',
+      'dms/dms_documents:*',
+      'shift_requests:index',
+      'ho_performance_plans:ho_my_performance_report'
+    ],
+    'Super Administrator': [ '*' ]
+  }
+}
+branch codeeee102
+Autorazation
+Autorazation
+search input is false
+false found
+Autorazation
+Autorazation
+search input is false
+false found
+Autorazation
