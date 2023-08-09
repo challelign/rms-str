@@ -39,6 +39,12 @@ require("./src/routes/rms.route.js")(app);
 // str routes
 require("./src/routes/str.route.js")(app);
 
+//Middleware to handle 404 errors
+app.use((req, res, next) => {
+  res
+    .status(404)
+    .json({ status: "ERROR", message: `This ${req.url} URL does not exist` });
+});
 // set port, listen for requests
 app.listen(3001, () => {
   // eslint-disable-next-line no-console

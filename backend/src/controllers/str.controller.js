@@ -1,28 +1,26 @@
-// const FcyCustomer = require("../models/fcyCustomer.model");
-const ProminentCustomer = require("../models/prominentCustomerLoan.model");
+const Str_List = require("../models/str.model");
 
 exports.create = (req, res) => {
   // validate request
   if (!req.body) res.status(400).send({ message: "Content can not be empty!" });
 
   // create new customer
-  const prominentCustomer = new ProminentCustomer({
+  const str_list = new Str_List({
     user_id: req.session.user_id,
-    branch_code: req.session.branch_code,
+    customer_branch: req.session.branch_code,
     branch: req.session.branch,
-
-    // disbursed_loan: req.body.disbursed_loan,
-    company_name: req.body.company_name,
-    // borrowers_name: req.body.borrowers_name,
-    // district: req.body.district,
-
+    customer_id: req.body.customer_id,
+    customer_name: req.body.customer_name,
     account_number: req.body.account_number,
-    // credit_amount: req.body.credit_amount,
+    transaction_id: req.body.transaction_id,
+    reason: req.body.reason,
+    address: req.body.address,
   });
 
   // save customer in the database
-  ProminentCustomer.create(prominentCustomer, (err, data) => {
+  Str_List.create(str_list, (err, data) => {
     //if (req.session.BOResourceLogged) {
+
     if (err)
       res.status(500).send({
         message:
@@ -32,6 +30,7 @@ exports.create = (req, res) => {
     //}
   });
 };
+
 exports.findAll = (req, res) => {
   if (req.session.autenticated) {
     if (req.session.BOResourceLogged) {
@@ -51,7 +50,7 @@ exports.findAll = (req, res) => {
         ? false
         : true;
     if (myBoolean) {
-      ProminentCustomer.search(
+      Str_List.search(
         page,
         countPerPage,
         searchInput,
@@ -69,7 +68,7 @@ exports.findAll = (req, res) => {
 
       console.log("true found");
     } else {
-      ProminentCustomer.getAll(
+      Str_List.getAll(
         page,
         countPerPage,
         BOResourceLoggedIn,
@@ -93,12 +92,13 @@ exports.findAll = (req, res) => {
     res.json({ authorized: false });
   }
 };
+
 exports.delete = (req, res) => {
   if (req.session.autenticated) {
     console.log("bo resource can delete" + req.session.userCanDelete);
     const { fcyCustomerId } = req.params;
 
-    ProminentCustomer.remove(fcyCustomerId, (err) => {
+    Str_List.remove(fcyCustomerId, (err) => {
       if (err) {
         err.result === "not_found"
           ? res
@@ -114,6 +114,7 @@ exports.delete = (req, res) => {
   }
   // else{ res.send({ message: "unauthorized access!" });}
 };
+
 exports.updateCustomer = (req, res) => {
   if (req.session.autenticated) {
     console.log("called");
@@ -124,10 +125,10 @@ exports.updateCustomer = (req, res) => {
       res.status(400).send({ message: "Content can not be empty!" });
 
     const { customerId } = req.params;
-    const data = new ProminentCustomer(req.body);
+    const data = new Str_List(req.body);
     console.log(data);
     //LoggedUser.update_action(0,0,0,0,1,req.session.user_id, (err, data) => {  });
-    ProminentCustomer.updateById(
+    Str_List.updateById(
       customerId,
       data,
       req.session.user_id,
@@ -151,6 +152,7 @@ exports.updateCustomer = (req, res) => {
     res.json({ authorized: false });
   }
 };
+
 exports.updateStatus = (req, res) => {
   if (req.session.branchLogged) {
     // validate request
@@ -158,7 +160,7 @@ exports.updateStatus = (req, res) => {
       res.status(400).send({ message: "Content can not be empty!" });
 
     const { customerId } = req.params;
-    const data = new PotentialCustomer(req.body);
+    const data = new Str_List(req.body);
     console.log(data);
     LoggedUser.update_action(
       0,
@@ -169,7 +171,7 @@ exports.updateStatus = (req, res) => {
       req.session.user_id,
       (err, data) => {}
     );
-    PotentialCustomer.updateById(
+    Str_List.updateById(
       customerId,
       data,
       req.session.user_id,
