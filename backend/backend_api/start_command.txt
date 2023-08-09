@@ -1,5 +1,0 @@
-open cmd from this path and start type  
-pm2 start server.js --watch
-pm2 start server.js --node-args="--max-old-space-size=6144" --exp-backoff-restart-delay=100 --watch
-pm2 start server.js --max-memory-restart 100M --exp-backoff-restart-delay=100 --watch
-pm2 start server.js --max-memory-restart 100M --restart-delay=3000 --node-args="--max-old-space-size=16384" --watch

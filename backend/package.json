@@ -1,0 +1,41 @@
+{
+  "name": "node.js-express-rest-api-mysql",
+  "version": "1.0.0",
+  "description": "nodejs restful api ",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prod": "node server.js",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "mysql",
+    "restapi"
+  ],
+  "author": "Seife",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "forever": "^3.0.4",
+    "memorystore": "^1.6.4",
+    "mysql": "^2.18.1",
+    "node-windows": "^1.0.0-beta.8"
+  },
+  "max_memory_restart": "180",
+  "node_args": [
+    "--max_old_space_size=200"
+  ],
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
