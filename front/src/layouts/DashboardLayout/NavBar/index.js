@@ -27,6 +27,7 @@ import { Navigate } from "react-router-dom";
 import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
+import TransferWithinAStationIcon from "@material-ui/icons/TransferWithinAStation";
 const user = {
 	avatar: "/static/images/avatars/avatar_6.png",
 	jobTitle: "Senior Developer",
@@ -88,6 +89,13 @@ const items = [
 		icon: AccountBalanceWalletIcon,
 		title: "Money Transfer",
 		id: 7,
+	},
+
+	{
+		href: "/rms2/app/str",
+		icon: TransferWithinAStationIcon,
+		title: "STR-Suspicious T.",
+		id: 7.1,
 	},
 
 	{

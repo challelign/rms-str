@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `str_list` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
   `branch_code` varchar(30) NOT NULL,
-  `customer_name` varchar(100) NOT NULL,
+  `full_name` varchar(100) NOT NULL,
   `branch` varchar(100) NOT NULL, 
   `transaction_id` varchar(500) DEFAULT NULL,
   `reason` varchar(500) CHARACTER SET utf8 DEFAULT NULL,
