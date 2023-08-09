@@ -36,6 +36,9 @@ app.get("/", (req, res) => {
 // customers route
 require("./src/routes/rms.route.js")(app);
 
+// str routes
+require("./src/routes/str.route.js")(app);
+
 // set port, listen for requests
 app.listen(3001, () => {
   // eslint-disable-next-line no-console
