@@ -47,8 +47,8 @@ exports.create = (req, res) => {
       });
     }
     const files = req.files;
-    let fileNames = files.map((file) => file.filename);
-    fileNames = fileNames.join(", ");
+    let fileNames = files?.map((file) => file.filename);
+    fileNames = fileNames?.join(", ");
 
     const str_list = new Str_List({
       user_id: req.session.user_id,
