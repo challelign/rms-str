@@ -1,30 +1,30 @@
 const Str_List = require("../models/str.model");
 const file = require("../utils/file");
 
-exports.uploads = (req, res) => {
-  file.upload(req, res, (err) => {
-    if (err) {
-      return res.status(500).json({
-        status: "FAILURE",
-        message: "Error uploading files",
-      });
-    }
-    const files = req.files;
-    res.status(200).json({
-      status: "SUCCESS",
-      message: "Files uploaded successfully",
-      fileCount: files.length,
-    });
-  });
-};
+// exports.uploads = (req, res) => {
+//   file.upload(req, res, (err) => {
+//     if (err) {
+//       return res.status(500).json({
+//         status: "FAILURE",
+//         message: "Error uploading files",
+//       });
+//     }
+//     const files = req.files;
+//     res.status(200).json({
+//       status: "SUCCESS",
+//       message: "Files uploaded successfully",
+//       fileCount: files.length,
+//     });
+//   });
+// };
 
-exports.deleteFile = (req, res) => {
-  const { fileName } = req.body;
-  file.deleteFile(fileName);
-  res.status(200).json({
-    message: "Files deleted successfully",
-  });
-};
+// exports.deleteFile = (req, res) => {
+//   const { fileName } = req.body;
+//   file.deleteFile(fileName);
+//   res.status(200).json({
+//     message: "Files deleted successfully",
+//   });
+// };
 
 exports.create = (req, res) => {
   // validate request
@@ -77,167 +77,113 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-  if (req.session.autenticated) {
-    if (req.session.BOResourceLogged) {
-      var BOResourceLoggedIn = true;
-    } else {
-      var BOResourceLoggedIn = false;
-    }
+  if (!req.session.autenticated)
+    res
+      .status(401)
+      .send({ status: "FAILURE", authorized: false, message: "Unauthorized" });
 
-    const { page } = req.params;
-    const { countPerPage } = req.params;
-    const { searchInput } = req.params;
-    const { searchRequested } = req.params;
-
-    console.log("search input is " + searchRequested);
-    var myBoolean =
-      searchRequested === undefined || searchRequested.toLowerCase() === "false"
-        ? false
-        : true;
-    if (myBoolean) {
-      Str_List.search(
-        page,
-        countPerPage,
-        searchInput,
-        req.session.branch_code,
-        (err, data) => {
-          if (err)
-            res.status(500).send({
-              message:
-                err.message || "Some error occurred while retrieve customers.",
-            });
-
-          res.send(data);
-        }
-      );
-
-      console.log("true found");
-    } else {
-      Str_List.getAll(
-        page,
-        countPerPage,
-        BOResourceLoggedIn,
-        req.session.branch_code,
-        (err, data) => {
-          if (err)
-            res.status(500).send({
-              message:
-                err.message || "Some error occurred while retrieve customers.",
-            });
-
-          res.send(data);
-          console.log("false found");
-        }
-      );
-    }
-    // } else {
-    //  res.json({ authorized: false });
-    // }
+  if (req.session.BOResourceLogged) {
+    var BOResourceLoggedIn = true;
   } else {
-    res.json({ authorized: false });
+    var BOResourceLoggedIn = false;
+  }
+
+  const { page } = req.params;
+  const { countPerPage } = req.params;
+  const { searchInput } = req.params;
+  const { searchRequested } = req.params;
+
+  var myBoolean =
+    searchRequested === undefined || searchRequested.toLowerCase() === "false"
+      ? false
+      : true;
+  if (myBoolean) {
+    Str_List.search(
+      page,
+      countPerPage,
+      searchInput,
+      req.session.branch_code,
+      (err, data) => {
+        if (err)
+          res.status(500).send({
+            message:
+              err.message || "Some error occurred while retrieve customers.",
+          });
+
+        res.send(data);
+      }
+    );
+  } else {
+    Str_List.getAll(
+      page,
+      countPerPage,
+      BOResourceLoggedIn,
+      req.session.branch_code,
+      (err, data) => {
+        if (err)
+          res.status(500).send({
+            message:
+              err.message || "Some error occurred while retrieve customers.",
+          });
+
+        res.send(data);
+      }
+    );
   }
 };
 
 exports.delete = (req, res) => {
-  if (req.session.autenticated) {
-    console.log("bo resource can delete" + req.session.userCanDelete);
-    const { fcyCustomerId } = req.params;
+  if (!req.session.autenticated)
+    res
+      .status(401)
+      .send({ status: "FAILURE", authorized: false, message: "Unauthorized" });
 
-    Str_List.remove(fcyCustomerId, (err) => {
-      if (err) {
-        err.result === "not_found"
-          ? res
-              .status(404)
-              .send({ message: `Not found customer with id ${fcyCustomerId}` })
-          : res.status(500).send({
-              message: `Could not delete customer with id ${fcyCustomerId}`,
-            });
-      } else res.send({ message: "FCY Customer  deleted successfully!" });
-    });
-  } else {
-    res.json({ authorized: false });
-  }
-  // else{ res.send({ message: "unauthorized access!" });}
+  const { fcyCustomerId } = req.params;
+
+  Str_List.remove(fcyCustomerId, (err) => {
+    if (err) {
+      err.result === "not_found"
+        ? res
+            .status(404)
+            .send({ message: `Not found customer with id ${fcyCustomerId}` })
+        : res.status(500).send({
+            message: `Could not delete customer with id ${fcyCustomerId}`,
+          });
+    } else res.send({ message: "FCY Customer  deleted successfully!" });
+  });
 };
 
 exports.updateCustomer = (req, res) => {
-  if (req.session.autenticated) {
-    console.log("called");
-    // validate request
+  if (!req.session.autenticated)
+    res
+      .status(401)
+      .send({ status: "FAILURE", authorized: false, message: "Unauthorized" });
 
-    console.log("req.body data is from the backend", req.body);
-    if (!req.body)
-      res.status(400).send({ message: "Content can not be empty!" });
+  if (!req.body)
+    res
+      .status(400)
+      .send({ status: "FAILURE", message: "Content can not be empty!" });
 
-    const { customerId } = req.params;
-    const data = new Str_List(req.body);
-    console.log(data);
-    //LoggedUser.update_action(0,0,0,0,1,req.session.user_id, (err, data) => {  });
-    Str_List.updateById(
-      customerId,
-      data,
-      req.session.user_id,
-      req.session.branch_code,
-      req.session.branch,
-      (err, data) => {
-        if (err) {
-          // eslint-disable-next-line no-unused-expressions
-          err.result === "not_found"
-            ? res
-                .status(404)
-                .send({ message: `Not found customer with id ${customerId}` })
-            : res.status(500).send({
-                message: `Could not update customer with id ${customerId}`,
-              });
-        } else
-          res.send({ message: "Customer data updated successfully!", data });
-      }
-    );
-  } else {
-    res.json({ authorized: false });
-  }
-};
+  const { customerId } = req.params;
+  const data = new Str_List(req.body);
 
-exports.updateStatus = (req, res) => {
-  if (req.session.branchLogged) {
-    // validate request
-    if (!req.body)
-      res.status(400).send({ message: "Content can not be empty!" });
-
-    const { customerId } = req.params;
-    const data = new Str_List(req.body);
-    console.log(data);
-    LoggedUser.update_action(
-      0,
-      0,
-      0,
-      0,
-      1,
-      req.session.user_id,
-      (err, data) => {}
-    );
-    Str_List.updateById(
-      customerId,
-      data,
-      req.session.user_id,
-      req.session.branch_code,
-      req.session.branch,
-      (err, data) => {
-        if (err) {
-          // eslint-disable-next-line no-unused-expressions
-          err.result === "not_found"
-            ? res
-                .status(404)
-                .send({ message: `Not found customer with id ${withdrowId}` })
-            : res.status(500).send({
-                message: `Could not update customer with id ${withdrowId}`,
-              });
-        }
-
-        res.send({ message: "Customer was updating successfully!", data });
-      }
-    );
-  } else {
-    res.json({ authorized: false });
-  }
+  Str_List.updateById(
+    customerId,
+    data,
+    req.session.user_id,
+    req.session.branch_code,
+    req.session.branch,
+    (err, data) => {
+      if (err) {
+        // eslint-disable-next-line no-unused-expressions
+        err.result === "not_found"
+          ? res
+              .status(404)
+              .send({ message: `Not found customer with id ${customerId}` })
+          : res.status(500).send({
+              message: `Could not update customer with id ${customerId}`,
+            });
+      } else res.send({ message: "Customer data updated successfully!", data });
+    }
+  );
 };
