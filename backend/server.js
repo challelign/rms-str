@@ -4,6 +4,10 @@ const cors = require("cors");
 const app = express();
 const session = require("express-session");
 var MemoryStore = require("memorystore")(session);
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
+
 app.use(
   session({
     secret: "334ajnbbasd",
@@ -19,6 +23,7 @@ app.use(
 );
 // parse requests of content-type: application/json
 app.use(bodyParser.json());
+
 app.use(cors({ origin: true, credentials: true }));
 
 // prevent CORS problems
@@ -38,6 +43,31 @@ require("./src/routes/rms.route.js")(app);
 
 // str routes
 require("./src/routes/str.route.js")(app);
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const uploadDir = "./src/uploads";
+
+    // Check if the directory exists, create it if it doesn't
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir);
+    }
+    cb(null, uploadDir);
+  },
+  filename: function (req, files, cb) {
+    cb(null, Date.now() + path.extname(files.originalname));
+  },
+});
+
+const upload = multer({ storage: storage });
+
+app.post("/upload", upload.array("files"), (req, res) => {
+  const files = req.files;
+  res.status(200).json({
+    message: "Files uploaded successfully",
+    fileCount: files.length,
+  });
+});
 
 //Middleware to handle 404 errors
 app.use((req, res, next) => {

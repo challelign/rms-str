@@ -13,6 +13,7 @@ function strList(str_list) {
   this.transaction_id = str_list.transaction_id;
   this.reason = str_list.reason;
   this.address = str_list.address;
+  this.file_name = str_list.file_name;
 }
 
 // create new potential customer

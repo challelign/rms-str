@@ -1,33 +1,78 @@
 const Str_List = require("../models/str.model");
+const file = require("../utils/file");
+
+exports.uploads = (req, res) => {
+  file.upload(req, res, (err) => {
+    if (err) {
+      return res.status(500).json({
+        status: "FAILURE",
+        message: "Error uploading files",
+      });
+    }
+    const files = req.files;
+    res.status(200).json({
+      status: "SUCCESS",
+      message: "Files uploaded successfully",
+      fileCount: files.length,
+    });
+  });
+};
+
+exports.deleteFile = (req, res) => {
+  const { fileName } = req.body;
+  file.deleteFile(fileName);
+  res.status(200).json({
+    message: "Files deleted successfully",
+  });
+};
 
 exports.create = (req, res) => {
   // validate request
-  if (!req.body) res.status(400).send({ message: "Content can not be empty!" });
+  if (!req.session.autenticated)
+    res
+      .status(401)
+      .send({ status: "FAILURE", authorized: false, message: "Unauthorized" });
 
-  // create new customer
-  const str_list = new Str_List({
-    user_id: req.session.user_id,
-    customer_branch: req.session.branch_code,
-    branch: req.session.branch,
-    customer_id: req.body.customer_id,
-    customer_name: req.body.customer_name,
-    account_number: req.body.account_number,
-    transaction_id: req.body.transaction_id,
-    reason: req.body.reason,
-    address: req.body.address,
-  });
+  if (!req.body)
+    res.status(400).send({
+      status: "FAILURE",
+      message: "Content can not be empty!",
+    });
 
-  // save customer in the database
-  Str_List.create(str_list, (err, data) => {
-    //if (req.session.BOResourceLogged) {
-
-    if (err)
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the customer.",
+  file.upload(req, res, (err) => {
+    if (err) {
+      return res.status(500).json({
+        status: "FAILURE",
+        message: "Failed to upload file",
       });
-    else res.send({ message: "Customer was created successfully!", data });
-    //}
+    }
+    const files = req.files;
+    let fileNames = files.map((file) => file.filename);
+    fileNames = fileNames.join(", ");
+
+    const str_list = new Str_List({
+      user_id: req.session.user_id,
+      customer_branch: req.session.branch_code,
+      branch: req.session.branch,
+      customer_id: req.body.customer_id,
+      customer_name: req.body.customer_name,
+      account_number: req.body.account_number,
+      transaction_id: req.body.transaction_id,
+      reason: req.body.reason,
+      address: req.body.address,
+      file_name: fileNames,
+    });
+
+    // save customer in the database
+    Str_List.create(str_list, (err, data) => {
+      if (err)
+        res.status(500).json({
+          message:
+            err.message || "Some error occurred while creating the customer.",
+        });
+      else
+        res.json({ status: "SUCCESS", message: "Created successfully!", data });
+    });
   });
 };
 
