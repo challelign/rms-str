@@ -8,7 +8,15 @@ import {
 	InputBase,
 	IconButton,
 	CardHeader,
+	Divider,
+	Box,
+	Card,
+	CardContent,
+	TextField,
+	Typography,
 } from "@material-ui/core";
+import EditIcon from "@material-ui/icons/Edit";
+
 import DataTable from "react-data-table-component";
 // import Page from 'src/components/Page';
 import SearchIcon from "@material-ui/icons/Search";
@@ -28,17 +36,22 @@ import CheckIcon from "@material-ui/icons/Check";
 import ClearIcon from "@material-ui/icons/Clear";
 import { Navigate } from "react-router-dom";
 import Slide from "@material-ui/core/Slide";
+import MuiDialogTitle from "@material-ui/core/DialogTitle";
 
 import { url } from "../../url";
 import StrRegister from "./StrRegister";
+import Alert from "@material-ui/lab/Alert/Alert";
+import DetailStrCustomer from "./DetailStrCustomer";
 window.$updateId = 0;
 window.$customer_name = "Test Name";
-window.$customer_address = "";
 window.$isLogged = 0;
-window.$dormant_customer_action = 0;
-window.$dormant_reason = 0;
-window.$dormant_remark = "";
-window.$customer_contact_address = "";
+
+window.$customer_name = "";
+window.$customer_address = "";
+window.$account_number = "";
+window.$transaction_id = "";
+window.$customer_id = "";
+window.$reason = "";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
@@ -77,66 +90,252 @@ var report = "";
 
 const StrList = () => {
 	const [values, setValues] = useState({
-		full_name: "",
-		transaction_id: "",
-		user_id: "",
-		reason: "",
-		address: "",
-		doc_file: "",
+		customer_name: "",
 		account_number: "",
-		//
-		organization_id: "",
-
-		phone: "",
-		fcy_customer_id: "",
-		mon_transf_type: "",
-		ref_num: "",
-		paid_date: "",
-		sender_name: "",
-		sender_country: "",
-		sender_city: "",
-		fcy: "",
-		amount_in_fcy: "",
-		amount_in_etb: "",
-		remark: "",
-		// account_number: '',
-		// account_number: '',
-		// phone: '',
-		credit_amount: "",
+		address: "",
+		transaction_id: "",
+		customer_id: "",
+		reason: "",
 	});
+
 	const [openCreate, setOpenCreate] = useState(false);
 	const [open, setOpen] = React.useState(false);
 	const [deleteConfirmOpen, setdeleteConfirmOpen] = React.useState(false);
+	const classes = useStyles();
+	const [dormantAccounts, setDormantAccounts] = useState({});
+	const [page, setPage] = useState(0);
+	const [isLoggedIn, setAuthorized] = useState(true);
+	const [totalRowCount, setTotalRowCount] = useState(1);
+	const [dataFetched, setDataFetched] = useState(false);
+	const [openEditCustomer, setOpenEditCustomer] = useState(false);
+	const [openFileUploadCustomer, setOpenFileUploadCustomer] = useState(false);
+
+	const [openDetailCustomer, setOpenDetailCustomer] = useState(false);
+	const [openEdit, setOpenEdit] = React.useState(false);
+	const [errorMessage2, setErrorMessage2] = useState("");
+
+	const [paginationReset, setPaginationReset] = useState(false);
+	const countPerPage = 6;
+
 	const createSTRUser = () => {
 		setOpenCreate(true);
+	};
+	const handleChange = (event) => {
+		setValues({
+			...values,
+			[event.target.name]: event.target.value,
+		});
 	};
 	const handleClose = () => {
 		setOpen(false);
 		setdeleteConfirmOpen(false);
-		// setOpenEdit(false);
+		setOpenEdit(false);
 		setOpenCreate(false);
 		// setLoadPayment(false);
 	};
+
+	const handleCloseEdit = () => {
+		setOpenEdit(false);
+		setdeleteConfirmOpen(false);
+		setOpenEdit(false);
+		setOpenCreate(false);
+		// setLoadPayment(false);
+		setOpenEditCustomer(false);
+		setOpenDetailCustomer(false);
+		setOpenFileUploadCustomer(false);
+	};
 	const myRefname = useRef(null);
-	// `user_ID`, `customer_branch`, `customer_name`, `account_number`, `customer_contact`, `reason`, `remark`, `efforts`, `responded`, `created_at`, `updated_at`
+
+	const editClicked = (
+		id,
+		customer_name,
+		address,
+		account_number,
+		transaction_id,
+		customer_id,
+		reason
+	) => {
+		console.log(id);
+		updateID = id;
+		setValues({
+			...values,
+			customer_name: customer_name,
+			address: address,
+			account_number: account_number,
+			transaction_id: transaction_id,
+			customer_id: customer_id,
+			reason: reason,
+		});
+
+		setOpenEditCustomer(true);
+	};
+
+	const clickFileUpload = (
+		id,
+		customer_name,
+		address,
+		account_number,
+		transaction_id,
+		customer_id,
+		reason
+	) => {
+		console.log(id);
+		updateID = id;
+		setValues({
+			...values,
+			customer_name: customer_name,
+			address: address,
+			account_number: account_number,
+			transaction_id: transaction_id,
+			customer_id: customer_id,
+			reason: reason,
+		});
+
+		setOpenFileUploadCustomer(true);
+	};
+	const detailClicked = (
+		id,
+		customer_name,
+		address,
+		account_number,
+		transaction_id,
+		customer_id,
+		reason
+	) => {
+		console.log(id);
+		updateID = id;
+		setValues({
+			...values,
+			customer_name: customer_name,
+			address: address,
+			account_number: account_number,
+			transaction_id: transaction_id,
+			customer_id: customer_id,
+			reason: reason,
+		});
+
+		setOpenDetailCustomer(true);
+	};
+
+	const editStrCustomer = () => {
+		alert(values.reason);
+		if (values.customer_id.trim() === "") {
+			setErrorMessage2("Please provide Customer ID");
+		} else if (values.customer_name.trim() === "") {
+			setErrorMessage2("Please provide Customer Name");
+		} else if (values.transaction_id.trim() === "") {
+			setErrorMessage2("Please provide Transaction Id");
+		} else if (values.address.trim() === "") {
+			setErrorMessage2("Please provide address");
+		} else if (values.account_number.trim() === "") {
+			setErrorMessage2("Account number length must be 16 digit.");
+		} else if (values.account_number.length !== 16) {
+			setErrorMessage2("Account number length must be 16 digit.");
+		} else if (values.reason.trim() === "") {
+			setErrorMessage2("Please provide reason");
+		} else {
+			axios
+				.put(
+					url + "/str/" + updateID,
+					{
+						customer_id: values.customer_id,
+						customer_name: values.customer_name,
+						address: values.address,
+						transaction_id: values.transaction_id,
+						reason: values.reason,
+						account_number: values.account_number,
+					},
+					{ withCredentials: true }
+				)
+				.then((res) => {
+					if (res.data.Status === "Success") {
+						console.log(res.data);
+						console.log("succeded");
+					} else {
+						console.log("Failed");
+					}
+				})
+				.then(
+					(data) => {
+						window.location.reload(false);
+						/* */
+					},
+					(error) => {
+						alert("Connection to the server failed");
+					}
+				);
+		}
+		console.log(values.account_number);
+		console.log(updateID);
+	};
+	const handleSubmitEdit = (event) => {
+		event.preventDefault();
+		editStrCustomer(); // Save  when form is submitted
+	};
 	const columns = [
 		{
 			name: "Customer Name",
-			selector: "customer_name",
+			// selector: "customer_name",
+			selector: (row) => row.customer_name,
 		},
 		{
 			name: "Account Number",
-			selector: "account_number",
+			selector: (row) => row.account_number,
+		},
+		{
+			name: "Transaction Id",
+			selector: (row) => row.transaction_id,
+		},
+		{
+			name: "ID Number",
+			selector: (row) => row.customer_id,
 		},
 
 		{
-			name: "Status on reason update",
-
+			name: "Upload",
 			cell: (row) =>
-				row.responded === 1 ? (
-					<CheckIcon style={{ fill: "green" }} />
-				) : row.responded === 0 ? (
-					<ClearIcon style={{ fill: "red" }} />
+				row.id != null ? (
+					<Button
+						color="primary"
+						onClick={() =>
+							clickFileUpload(
+								row.id,
+								row.customer_name,
+								row.address,
+								row.account_number,
+								row.transaction_id,
+								row.customer_id
+							)
+						}
+					>
+						File Upload
+					</Button>
+				) : (
+					""
+				),
+			ignoreRowClick: true,
+			allowOverflow: true,
+			button: true,
+		},
+
+		{
+			name: "Edit",
+			cell: (row) =>
+				row.id != null ? (
+					<Button
+						onClick={() =>
+							editClicked(
+								row.id,
+								row.customer_name,
+								row.address,
+								row.account_number,
+								row.transaction_id,
+								row.customer_id
+							)
+						}
+					>
+						<EditIcon style={{ fill: "#00094B" }} />
+					</Button>
 				) : (
 					""
 				),
@@ -147,25 +346,26 @@ const StrList = () => {
 		},
 
 		{
-			name: "Action",
+			name: "Detail",
 
 			cell: (row) =>
 				row.id != null ? (
 					<Button
 						color="primary"
 						onClick={() =>
-							click(
+							detailClicked(
 								row.id,
 								row.customer_name,
-								row.action,
-								row.reason,
-								row.remark,
-								row.customer_contact,
-								row.other_reason
+								row.address,
+								row.account_number,
+								row.transaction_id,
+
+								row.customer_id,
+								row.reason
 							)
 						}
 					>
-						Reason
+						View
 					</Button>
 				) : (
 					""
@@ -176,22 +376,9 @@ const StrList = () => {
 		},
 	];
 
-	const classes = useStyles();
-	const [dormantAccounts, setDormantAccounts] = useState({});
-	const [page, setPage] = useState(0);
-	const [isLoggedIn, setAuthorized] = useState(true);
-	const [totalRowCount, setTotalRowCount] = useState(1);
-	const [dataFetched, setDataFetched] = useState(false);
-	const countPerPage = 6;
-	const handleChange = (state) => {
-		// You can use setState or dispatch with something like Redux so we can use the retrieved data
-		console.log("Selected Rows: ", state.selectedRows);
-	};
 	function handleChanges(newValue) {
-		setValue(newValue);
+		setValues(newValue);
 	}
-
-	const [paginationReset, setPaginationReset] = useState(false);
 
 	const searchTriggred = (event) => {
 		event.preventDefault();
@@ -200,42 +387,49 @@ const StrList = () => {
 		searchInput = event.target.value;
 		if (event.target.value.trim() != "") {
 			searchRequested = true;
-			getDormantAccountsList();
+			getStrList();
 		} else {
 			searchRequested = false;
 
 			searchInput = null;
-			getDormantAccountsList();
+			getStrList();
 		}
 		prevSearchInput = searchInput;
 		console.log("search triggred with " + searchInput);
 		// Save  when form is submitted
 	};
 
-	const click = (id, name, action, reason, remark, phone, o_reason) => {
+	const click = (
+		id,
+		customer_name,
+		address,
+		account_number,
+		transaction_id,
+		customer_id,
+		reason
+	) => {
 		myRefname.current.click();
 		window.$updateId = id;
-		window.$customer_name = name;
-		console.log(id + " " + name);
-		window.$dormant_customer_action = action;
-		window.$dormant_reason = reason;
-		window.$dormant_remark = remark;
-		window.$customer_contact_address = phone;
-		window.$other_reason = o_reason;
+		window.$customer_name = customer_name;
+		window.$customer_address = address;
+		window.$account_number = account_number;
+		window.$transaction_id = transaction_id;
+		window.$customer_id = customer_id;
+		window.$reason = reason;
+
+		console.log(id + " " + transaction_id);
 	};
-	const getDormantAccountsList = () => {
+	const getStrList = () => {
 		setDataFetched(false);
 		axios
 			.get(
-				// `${url}/dormants-account-below-one-hundred/all/${page}/${countPerPage}`,
-				// `${url}/dormants-account-below-one-hundred/all/${page}/${countPerPage}/${searchInput}/${searchRequested}`,
-				`${url}/dormants-account-below-one-hundred/all/${page}/${countPerPage}/${searchInput}/${searchRequested}`,
+				`${url}/str/${page}/${countPerPage}/${searchInput}/${searchRequested}`,
 				{
 					withCredentials: true,
 				}
 			)
 			.then((res) => {
-				if (res.data.authorized == false) {
+				if (res.data.authorized === false) {
 					setAuthorized(false);
 				}
 				setDormantAccounts({});
@@ -252,9 +446,9 @@ const StrList = () => {
 				setDataFetched(true);
 			});
 	};
-
+	console.log(dormantAccounts);
 	useEffect(() => {
-		getDormantAccountsList();
+		getStrList();
 	}, [page]);
 
 	return (
@@ -263,7 +457,7 @@ const StrList = () => {
 			title="Suspicious Transaction List "
 			breadcrumbs={[{ name: "Forms", active: true }]}
 		>
-			<Popup
+			{/* <Popup
 				trigger={
 					<div ref={myRefname}>
 						<button style={{ visibility: "hidden" }} ref={myRefname} />
@@ -271,7 +465,7 @@ const StrList = () => {
 				}
 			>
 				<FileUpload />
-			</Popup>
+			</Popup> */}
 
 			{isLoggedIn ? (
 				<Container>
@@ -288,7 +482,6 @@ const StrList = () => {
 						<IconButton className={classes.iconButton} aria-label="search">
 							<SearchIcon />
 						</IconButton>
-
 						<Button
 							style={{ marginLeft: "auto", float: "right" }}
 							variant="outlined"
@@ -297,8 +490,38 @@ const StrList = () => {
 						>
 							<PersonAddIcon /> Register STR User
 						</Button>
-
+						{/* detail start */}
 						<Dialog
+							maxWidth="md"
+							fullWidth
+							open={openDetailCustomer}
+							TransitionComponent={Transition}
+							keepMounted
+							onClose={handleCloseEdit}
+							aria-describedby="alert-dialog-slide-description"
+							aria-labelledby="form-dialog-title"
+						>
+							<MuiDialogTitle disableTypography>
+								<Typography variant="h4">
+									{"ST Customer Detail "} {values.customer_name}
+								</Typography>
+							</MuiDialogTitle>
+							{/* Detail STR Customer */}
+							<DetailStrCustomer values={values} />
+							<Box display="flex" justifyContent="flex-end" p={2}>
+								<Grid>
+									<Button
+										onClick={handleCloseEdit}
+										variant="outlined"
+										color="primary"
+									>
+										Close
+									</Button>
+								</Grid>
+							</Box>
+						</Dialog>
+						{/* detail end */}
+						{/* <Dialog
 							open={open}
 							TransitionComponent={Transition}
 							keepMounted
@@ -319,7 +542,9 @@ const StrList = () => {
 									OK
 								</Button>
 							</DialogActions>
-						</Dialog>
+						</Dialog>{" "}
+ */}
+
 						<Dialog
 							open={openCreate}
 							TransitionComponent={Transition}
@@ -331,7 +556,6 @@ const StrList = () => {
 							<DialogTitle id="alert-dialog-slide-title">
 								{"Suspicious Transaction "}
 							</DialogTitle>
-							{/* FCY component  */}
 							<DialogContent>
 								<StrRegister />
 							</DialogContent>
@@ -341,6 +565,212 @@ const StrList = () => {
 									No cancel
 								</Button>
 							</DialogActions>
+						</Dialog>
+
+						<Dialog
+							open={openEditCustomer}
+							TransitionComponent={Transition}
+							keepMounted
+							onClose={handleCloseEdit}
+							aria-labelledby="alert-dialog-slide-title"
+							aria-describedby="alert-dialog-slide-description"
+						>
+							<DialogTitle id="alert-dialog-slide-title">
+								{"Edit ST Customer Detail "} {values.customer_name}
+							</DialogTitle>
+							<DialogContent>
+								<form autoComplete="off" noValidate onSubmit={handleSubmitEdit}>
+									<Card>
+										{errorMessage2 != "" ? (
+											<div className="error">
+												<Alert severity="warning">{errorMessage2}</Alert>
+											</div>
+										) : (
+											""
+										)}
+										<CardHeader />
+										<Divider />
+
+										<CardHeader title="Suspicious Transaction registration" />
+										<Divider />
+										<CardContent>
+											<Grid container spacing={3}>
+												<Grid item md={6} xs={12}>
+													<TextField
+														fullWidth
+														label="Customer ID"
+														name="customer_id"
+														readOnly={false}
+														onChange={handleChange}
+														required
+														//value={destination_branch}
+														value={values.customer_id}
+														variant="outlined"
+													/>
+												</Grid>
+												<Grid item md={6} xs={12}>
+													<TextField
+														fullWidth
+														label="Full Name"
+														name="customer_name"
+														readOnly={false}
+														onChange={handleChange}
+														required
+														aria-label="minimum height"
+														variant="outlined"
+														value={values.customer_name}
+													/>
+												</Grid>
+												<Grid item md={6} xs={12}>
+													<TextField
+														fullWidth
+														label="Account Number"
+														name="account_number"
+														readOnly={false}
+														onChange={handleChange}
+														aria-label="minimum height"
+														variant="outlined"
+														value={values.account_number}
+													/>
+													<p>Account Length Should be 16 Long </p>
+													<p>Current Length {values.account_number.length}</p>
+												</Grid>
+												<Grid item md={6} xs={12}>
+													<TextField
+														fullWidth
+														label="Address"
+														name="address"
+														readOnly={false}
+														onChange={handleChange}
+														aria-label="minimum height"
+														variant="outlined"
+														value={values.address}
+													/>
+												</Grid>
+												<Grid item md={6} xs={12}>
+													<TextField
+														fullWidth
+														label="Transaction Id"
+														name="transaction_id"
+														readOnly={false}
+														onChange={handleChange}
+														aria-label="minimum height"
+														variant="outlined"
+														value={values.transaction_id}
+													/>
+												</Grid>
+												<Grid item md={6} xs={12}>
+													<TextField
+														multiline
+														rows={4}
+														fullWidth
+														label="Reason Of Suspicious"
+														name="reason"
+														readOnly={false}
+														onChange={handleChange}
+														aria-label="minimum height"
+														variant="outlined"
+														value={values.reason ? values.reason.trim : ""}
+													/>
+												</Grid>
+												<Grid item md={6} xs={12}></Grid>
+											</Grid>
+										</CardContent>
+										<Divider />
+										<Box display="flex" justifyContent="flex-end" p={2}>
+											<Grid>
+												{" "}
+												<Button
+													onClick={handleCloseEdit}
+													variant="outlined"
+													color="primary"
+												>
+													Close
+												</Button>
+											</Grid>
+											<Grid>
+												<Button
+													variant="outlined"
+													color="primary"
+													type="submit"
+												>
+													Create
+												</Button>
+											</Grid>
+										</Box>
+									</Card>
+								</form>
+							</DialogContent>
+							<DialogActions></DialogActions>
+						</Dialog>
+
+						{/* File Upload */}
+
+						<Dialog
+							open={openFileUploadCustomer}
+							TransitionComponent={Transition}
+							keepMounted
+							onClose={handleCloseEdit}
+							aria-labelledby="alert-dialog-slide-title"
+							aria-describedby="alert-dialog-slide-description"
+						>
+							<DialogTitle id="alert-dialog-slide-title">
+								{"Suspicious Transaction Customer "} {values.customer_name}
+							</DialogTitle>
+							<DialogContent>
+								{/* <form autoComplete="off" noValidate onSubmit={handleSubmitEdit}>
+									<Card>
+										{errorMessage2 != "" ? (
+											<div className="error">
+												<Alert severity="warning">{errorMessage2}</Alert>
+											</div>
+										) : (
+											""
+										)}
+										<CardHeader />
+										<Divider />
+
+										<CardHeader title="Suspicious Transaction registration" />
+										<Divider />
+										<CardContent></CardContent>
+
+										<Box display="flex" justifyContent="flex-end" p={2}>
+											<Grid>
+												{" "}
+												<Button
+													onClick={handleCloseEdit}
+													variant="outlined"
+													color="primary"
+												>
+													Close
+												</Button>
+											</Grid>
+											<Grid>
+												<Button
+													variant="outlined"
+													color="primary"
+													type="submit"
+												>
+													Create
+												</Button>
+											</Grid>
+										</Box>
+									</Card>
+								</form> */}
+								<FileUpload id={updateID} />
+								<Box display="flex" justifyContent="flex-end" p={2}>
+									<Grid>
+										<Button
+											onClick={handleCloseEdit}
+											variant="outlined"
+											color="primary"
+										>
+											Close
+										</Button>
+									</Grid>
+								</Box>
+							</DialogContent>
+							<DialogActions></DialogActions>
 						</Dialog>
 					</Paper>
 

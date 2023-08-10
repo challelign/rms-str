@@ -20,34 +20,40 @@ import { CloudUpload as CloudUploadIcon } from "@material-ui/icons";
 const StrRegister = (props) => {
 	const [redirect, setRedirect] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
-	const [file, setFile] = useState([]);
+	const [files, setFiles] = useState([]);
 
 	const [values, setValues] = useState({
-		full_name: "",
+		customer_name: "",
+		account_number: "",
 		transaction_id: "",
-		user_id: "",
+		customer_id: "",
 		reason: "",
 		address: "",
-		account_number: "",
 	});
 	const handleFileChange = (event) => {
-		setFile(event.target.files);
+		// setFiles(event.target.files);
+		const uploadedFiles = Array.from(event.target.files);
+		setFiles(uploadedFiles);
 	};
-	// const handleUpload = () => {
-	// 	// Perform upload logic here
-	// 	console.log(selectedFiles);
-	// };
+
 	const saveCustomer = () => {
-		const fileData = new FormData();
+		// Create a FormData object
 
-		if (file !== null) {
-			fileData.append("file", file);
-		}
-		console.log(fileData);
+		const formData = new FormData();
+		// formData.append("customer_name", values.customer_name);
+		// formData.append("transaction_id", values.transaction_id);
+		// formData.append("customer_id", values.customer_id);
+		// formData.append("reason", values.reason);
+		// formData.append("address", values.address);
+		// formData.append("account_number", values.account_number);
 
-		if (values.user_id.trim() === "") {
+		files.forEach((file, index) => {
+			formData.append(`file${index}`, file);
+		});
+
+		if (values.customer_id.trim() === "") {
 			setErrorMessage("Please provide Customer ID");
-		} else if (values.full_name.trim() === "") {
+		} else if (values.customer_name.trim() === "") {
 			setErrorMessage("Please provide Customer Name");
 		} else if (values.transaction_id.trim() === "") {
 			setErrorMessage("Please provide Transaction Id");
@@ -55,27 +61,34 @@ const StrRegister = (props) => {
 			setErrorMessage("Please provide reason");
 		} else if (values.address.trim() === "") {
 			setErrorMessage("Please provide address");
-		} else if (
-			values.account_number.trim() !== "" &&
-			values.account_number.length !== 16
-		) {
+		} else if (values.account_number.trim() === "") {
+			setErrorMessage("Account number length must be 16 digit.");
+		} else if (values.account_number.length !== 16) {
 			setErrorMessage("Account number length must be 16 digit.");
 		} else {
 			axios
 				.post(
-					url + "/fcy",
+					url + "/str",
 					{
-						user_id: values.user_id,
-						full_name: values.full_name,
+						customer_id: values.customer_id,
+						customer_name: values.customer_name,
 						address: values.address,
 						transaction_id: values.transaction_id,
 						reason: values.reason,
 						account_number: values.account_number,
-						selectedFiles: fileData,
+						files: formData,
 					},
 					{ withCredentials: true }
 				)
-				.then((res) => console.log(res.data))
+				.then((res) => {
+					if (res.data.Status === "Success") {
+						console.log(res.data);
+						console.log("succeded");
+					} else {
+						console.log("Failed");
+					}
+				})
+
 				.then(
 					(data) => {
 						window.location.reload(false);
@@ -84,9 +97,12 @@ const StrRegister = (props) => {
 					},
 					(error) => {
 						alert("Connection to the server failed");
+						console.log(formData);
 					}
 				);
 		}
+
+		console.log(formData);
 	};
 
 	const handleSubmit = (event) => {
@@ -126,7 +142,7 @@ const StrRegister = (props) => {
 							<TextField
 								fullWidth
 								label="Customer ID"
-								name="user_id"
+								name="customer_id"
 								readOnly={false}
 								onChange={handleChange}
 								required
@@ -139,7 +155,7 @@ const StrRegister = (props) => {
 							<TextField
 								fullWidth
 								label="Full Name"
-								name="full_name"
+								name="customer_name"
 								readOnly={false}
 								onChange={handleChange}
 								required
@@ -157,6 +173,8 @@ const StrRegister = (props) => {
 								aria-label="minimum height"
 								variant="outlined"
 							/>
+							<p>Account Length Should be 16 Long </p>
+							<p>Current Length {values.account_number.length}</p>
 						</Grid>
 						<Grid item md={6} xs={12}>
 							<TextField
@@ -185,7 +203,7 @@ const StrRegister = (props) => {
 								multiline
 								rows={4}
 								fullWidth
-								label="Reason Of "
+								label="Reason Of Suspicious"
 								name="reason"
 								readOnly={false}
 								onChange={handleChange}
@@ -201,7 +219,7 @@ const StrRegister = (props) => {
 								type="file"
 								accept="file/*"
 								multiple
-								name={file}
+								name={files}
 								onChange={handleFileChange}
 								style={{ display: "none" }}
 								id="file-upload"
@@ -219,16 +237,24 @@ const StrRegister = (props) => {
 						</Grid>
 						<Grid item>
 							<Typography variant="body1">
-								{file.length} file(s) selected
+								{files.length} file(s) selected
 							</Typography>
 						</Grid>
 						<Grid item>
-							{file.length > 0 && (
+							{files.length > 0 && (
 								<Typography variant="body1">
 									Selected files:
-									{Array.from(file)
+									{/* {Array.from(files)
 										.map((file) => file.name)
-										.join(", ")}
+										.join(", ")} */}
+									{Array.from(files).map((file, index) => (
+										<>
+											<p key={file.name}>
+												{index + 1} . {file.name}
+												<br />
+											</p>
+										</>
+									))}
 								</Typography>
 							)}
 						</Grid>
