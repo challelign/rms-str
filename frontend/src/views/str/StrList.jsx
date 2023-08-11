@@ -16,6 +16,7 @@ import {
 	Typography,
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
+import { AxiosError } from "axios";
 
 import DataTable from "react-data-table-component";
 // import Page from 'src/components/Page';
@@ -154,8 +155,8 @@ const StrList = () => {
 		account_number,
 		transaction_id,
 		customer_id,
-		reason,
-		file_name
+		reason
+		// file_name
 	) => {
 		console.log(id);
 		updateID = id;
@@ -167,7 +168,7 @@ const StrList = () => {
 			transaction_id: transaction_id,
 			customer_id: customer_id,
 			reason: reason,
-			file_name: file_name,
+			// file_name: file_name,
 		});
 
 		setOpenEditCustomer(true);
@@ -180,8 +181,8 @@ const StrList = () => {
 		account_number,
 		transaction_id,
 		customer_id,
-		reason,
-		file_name
+		reason
+		// file_name
 	) => {
 		console.log(id);
 		updateID = id;
@@ -193,7 +194,7 @@ const StrList = () => {
 			transaction_id: transaction_id,
 			customer_id: customer_id,
 			reason: reason,
-			file_name: file_name,
+			// file_name: file_name,
 		});
 
 		setOpenFileUploadCustomer(true);
@@ -225,7 +226,6 @@ const StrList = () => {
 	};
 
 	const editStrCustomer = () => {
-		alert(values.reason);
 		if (values.customer_id.trim() === "") {
 			setErrorMessage2("Please provide Customer ID");
 		} else if (values.customer_name.trim() === "") {
@@ -249,8 +249,9 @@ const StrList = () => {
 						customer_name: values.customer_name,
 						address: values.address,
 						transaction_id: values.transaction_id,
-						reason: values.reason,
+
 						account_number: values.account_number,
+						reason: values.reason,
 					},
 					{ withCredentials: true }
 				)
@@ -264,13 +265,28 @@ const StrList = () => {
 				})
 				.then(
 					(data) => {
+						alert("Customer Detail saved");
 						window.location.reload(false);
-						/* */
-					},
-					(error) => {
-						alert("Connection to the server failed");
 					}
-				);
+
+					// ,
+					// (error) => {
+					// 	alert("Connection to the server failed");
+					// }
+				)
+				.catch((error) => {
+					if (!error?.response) {
+						setErrorMessage2("No Server Response");
+					} else if (error?.code === AxiosError.ERR_NETWORK) {
+						setErrorMessage2("Network Error");
+					} else if (error.response?.status === 404) {
+						setErrorMessage2("404 - Not Found");
+					} else if (error?.code) {
+						setErrorMessage2("Code: " + error.code);
+					} else {
+						setErrorMessage2("Unknown Error");
+					}
+				});
 		}
 		console.log(values.account_number);
 		console.log(updateID);
@@ -337,7 +353,8 @@ const StrList = () => {
 								row.address,
 								row.account_number,
 								row.transaction_id,
-								row.customer_id
+								row.customer_id,
+								row.reason
 							)
 						}
 					>
@@ -384,9 +401,9 @@ const StrList = () => {
 		},
 	];
 
-	function handleChanges(newValue) {
-		setValues(newValue);
-	}
+	// function handleChanges(newValue) {
+	// 	setValues(newValue);
+	// }
 
 	const searchTriggred = (event) => {
 		event.preventDefault();
@@ -501,21 +518,19 @@ const StrList = () => {
 						>
 							<MuiDialogTitle disableTypography>
 								<Typography variant="h4">
-									{"ST Customer Detail "} {values.customer_name}
+									{"ST Customer Detail "} for {values.customer_name}
 								</Typography>
 							</MuiDialogTitle>
 							{/* Detail STR Customer */}
 							<DetailStrCustomer values={values} />
 							<Box display="flex" justifyContent="flex-end" p={2}>
-								<Grid>
-									<Button
-										onClick={handleCloseEdit}
-										variant="outlined"
-										color="primary"
-									>
-										Close
-									</Button>
-								</Grid>
+								<Button
+									onClick={handleCloseEdit}
+									variant="outlined"
+									color="primary"
+								>
+									Close
+								</Button>
 							</Box>
 						</Dialog>
 						{/* detail end */}
@@ -574,7 +589,8 @@ const StrList = () => {
 							aria-describedby="alert-dialog-slide-description"
 						>
 							<DialogTitle id="alert-dialog-slide-title">
-								{"Edit ST Customer Detail "} {values.customer_name}
+								{"Edit ST Customer Detail "}for {values.customer_name} id is{" "}
+								{updateID}
 							</DialogTitle>
 							<DialogContent>
 								<form autoComplete="off" noValidate onSubmit={handleSubmitEdit}>
@@ -668,7 +684,7 @@ const StrList = () => {
 														onChange={handleChange}
 														aria-label="minimum height"
 														variant="outlined"
-														value={values.reason ? values.reason.trim : ""}
+														value={values.reason}
 													/>
 												</Grid>
 												<Grid item md={6} xs={12}></Grid>

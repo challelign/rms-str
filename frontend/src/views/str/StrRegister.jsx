@@ -15,6 +15,8 @@ import {
 } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import { url } from "../../url";
+import { AxiosError } from "axios";
+
 import { CloudUpload as CloudUploadIcon } from "@material-ui/icons";
 
 const StrRegister = (props) => {
@@ -78,14 +80,28 @@ const StrRegister = (props) => {
 				})
 				.then(
 					(data) => {
+						alert("Customer Detail saved");
 						window.location.reload(false);
-					},
-					(error) => {
-						alert("Connection to the server failed");
-						console.log(formData);
 					}
+					// ,
+					// (error) => {
+					// 	alert("Connection to the server failed");
+					// 	console.log(formData);
+					// }
 				)
-				.catch((err) => console.error(err));
+				.catch((error) => {
+					if (!error?.response) {
+						setErrorMessage("No Server Response");
+					} else if (error?.code === AxiosError.ERR_NETWORK) {
+						setErrorMessage("Network Error");
+					} else if (error.response?.status === 404) {
+						setErrorMessage("404 - Not Found");
+					} else if (error?.code) {
+						setErrorMessage("Code: " + error.code);
+					} else {
+						setErrorMessage("Unknown Error");
+					}
+				});
 		}
 
 		console.log(formData);
