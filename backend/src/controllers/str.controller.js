@@ -29,12 +29,12 @@ const file = require("../utils/file");
 exports.create = (req, res) => {
   // validate request
   if (!req.session.autenticated)
-    res
+    return res
       .status(401)
       .send({ status: "FAILURE", authorized: false, message: "Unauthorized" });
 
   if (!req.body)
-    res.status(400).send({
+    return res.status(400).send({
       status: "FAILURE",
       message: "Content can not be empty!",
     });
@@ -66,19 +66,23 @@ exports.create = (req, res) => {
     // save customer in the database
     Str_List.create(str_list, (err, data) => {
       if (err)
-        res.status(500).json({
+        return res.status(500).json({
           message:
             err.message || "Some error occurred while creating the customer.",
         });
       else
-        res.json({ status: "SUCCESS", message: "Created successfully!", data });
+        return res.json({
+          status: "SUCCESS",
+          message: "Created successfully!",
+          data,
+        });
     });
   });
 };
 
 exports.findAll = (req, res) => {
   if (!req.session.autenticated)
-    res
+    return res
       .status(401)
       .send({ status: "FAILURE", authorized: false, message: "Unauthorized" });
 
@@ -105,7 +109,7 @@ exports.findAll = (req, res) => {
       req.session.branch_code,
       (err, data) => {
         if (err)
-          res.status(500).send({
+          return res.status(500).send({
             message:
               err.message || "Some error occurred while retrieve customers.",
           });
@@ -121,7 +125,7 @@ exports.findAll = (req, res) => {
       req.session.branch_code,
       (err, data) => {
         if (err)
-          res.status(500).send({
+          return res.status(500).send({
             message:
               err.message || "Some error occurred while retrieve customers.",
           });
@@ -134,7 +138,7 @@ exports.findAll = (req, res) => {
 
 exports.delete = (req, res) => {
   if (!req.session.autenticated)
-    res
+    return res
       .status(401)
       .send({ status: "FAILURE", authorized: false, message: "Unauthorized" });
 
@@ -142,25 +146,27 @@ exports.delete = (req, res) => {
 
   Str_List.remove(fcyCustomerId, (err) => {
     if (err) {
-      err.result === "not_found"
-        ? res
-            .status(404)
-            .send({ message: `Not found customer with id ${fcyCustomerId}` })
-        : res.status(500).send({
-            message: `Could not delete customer with id ${fcyCustomerId}`,
-          });
-    } else res.send({ message: "FCY Customer  deleted successfully!" });
+      const result =
+        err.result === "not_found"
+          ? res
+              .status(404)
+              .send({ message: `Not found customer with id ${fcyCustomerId}` })
+          : res.status(500).send({
+              message: `Could not delete customer with id ${fcyCustomerId}`,
+            });
+      return result;
+    } else return res.send({ message: "FCY Customer  deleted successfully!" });
   });
 };
 
 exports.updateCustomer = (req, res) => {
   if (!req.session.autenticated)
-    res
+    return res
       .status(401)
       .send({ status: "FAILURE", authorized: false, message: "Unauthorized" });
 
   if (!req.body)
-    res
+    return res
       .status(400)
       .send({ status: "FAILURE", message: "Content can not be empty!" });
 
@@ -176,14 +182,20 @@ exports.updateCustomer = (req, res) => {
     (err, data) => {
       if (err) {
         // eslint-disable-next-line no-unused-expressions
-        err.result === "not_found"
-          ? res
-              .status(404)
-              .send({ message: `Not found customer with id ${customerId}` })
-          : res.status(500).send({
-              message: `Could not update customer with id ${customerId}`,
-            });
-      } else res.send({ message: "Customer data updated successfully!", data });
+        const result =
+          err.result === "not_found"
+            ? res
+                .status(404)
+                .send({ message: `Not found customer with id ${customerId}` })
+            : res.status(500).send({
+                message: `Could not update customer with id ${customerId}`,
+              });
+        return result;
+      } else
+        return res.send({
+          message: "Customer data updated successfully!",
+          data,
+        });
     }
   );
 };
