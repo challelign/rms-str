@@ -31,25 +31,23 @@ const StrRegister = (props) => {
 		address: "",
 	});
 	const handleFileChange = (event) => {
-		// setFiles(event.target.files);
-		const uploadedFiles = Array.from(event.target.files);
-		setFiles(uploadedFiles);
+		setFiles(event.target.files);
 	};
 
 	const saveCustomer = () => {
 		// Create a FormData object
 
 		const formData = new FormData();
-		// formData.append("customer_name", values.customer_name);
-		// formData.append("transaction_id", values.transaction_id);
-		// formData.append("customer_id", values.customer_id);
-		// formData.append("reason", values.reason);
-		// formData.append("address", values.address);
-		// formData.append("account_number", values.account_number);
 
-		files.forEach((file, index) => {
-			formData.append(`file${index}`, file);
-		});
+		for (let i = 0; i < files.length; i++) {
+			formData.append("files", files[i]);
+		}
+		formData.append("customer_name", values.customer_name);
+		formData.append("transaction_id", values.transaction_id);
+		formData.append("customer_id", values.customer_id);
+		formData.append("reason", values.reason);
+		formData.append("address", values.address);
+		formData.append("account_number", values.account_number);
 
 		if (values.customer_id.trim() === "") {
 			setErrorMessage("Please provide Customer ID");
@@ -67,39 +65,27 @@ const StrRegister = (props) => {
 			setErrorMessage("Account number length must be 16 digit.");
 		} else {
 			axios
-				.post(
-					url + "/str",
-					{
-						customer_id: values.customer_id,
-						customer_name: values.customer_name,
-						address: values.address,
-						transaction_id: values.transaction_id,
-						reason: values.reason,
-						account_number: values.account_number,
-						files: formData,
-					},
-					{ withCredentials: true }
-				)
+				.post(url + "/str", formData, {
+					withCredentials: true,
+				})
 				.then((res) => {
-					if (res.data.Status === "Success") {
+					if (res.data.status === "Success") {
 						console.log(res.data);
 						console.log("succeded");
 					} else {
 						console.log("Failed");
 					}
 				})
-
 				.then(
 					(data) => {
 						window.location.reload(false);
-
-						/* */
 					},
 					(error) => {
 						alert("Connection to the server failed");
 						console.log(formData);
 					}
-				);
+				)
+				.catch((err) => console.error(err));
 		}
 
 		console.log(formData);
@@ -125,6 +111,7 @@ const StrRegister = (props) => {
 			// className={clsx(classes.root, className)}
 			// {...rest}
 			onSubmit={handleSubmit}
+			enctype="multipart/form-data"
 		>
 			<Card>
 				{errorMessage !== "" ? (
@@ -219,7 +206,7 @@ const StrRegister = (props) => {
 								type="file"
 								accept="file/*"
 								multiple
-								name={files}
+								name="files"
 								onChange={handleFileChange}
 								style={{ display: "none" }}
 								id="file-upload"
