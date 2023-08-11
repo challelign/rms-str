@@ -5,7 +5,9 @@ const fs = require("fs");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const uploadDir = "./public/uploads";
-
+    if (!fs.existsSync("./public")) {
+      fs.mkdirSync("./public");
+    }
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir);
     }
