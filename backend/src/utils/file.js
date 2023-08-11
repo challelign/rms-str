@@ -4,7 +4,7 @@ const fs = require("fs");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const uploadDir = "./src/uploads";
+    const uploadDir = "./public/uploads";
 
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir);
@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage }).array("files");
 
 const deleteFile = (fileName) => {
-  const filePath = path.join("./src/uploads", fileName);
+  const filePath = path.join("./public/uploads", fileName);
   fs.unlink(filePath, (err) => {
     if (err) {
       console.error("Error deleting file: ", err);
