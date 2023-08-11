@@ -96,6 +96,7 @@ const StrList = () => {
 		transaction_id: "",
 		customer_id: "",
 		reason: "",
+		file_name: "",
 	});
 
 	const [openCreate, setOpenCreate] = useState(false);
@@ -153,7 +154,8 @@ const StrList = () => {
 		account_number,
 		transaction_id,
 		customer_id,
-		reason
+		reason,
+		file_name
 	) => {
 		console.log(id);
 		updateID = id;
@@ -165,6 +167,7 @@ const StrList = () => {
 			transaction_id: transaction_id,
 			customer_id: customer_id,
 			reason: reason,
+			file_name: file_name,
 		});
 
 		setOpenEditCustomer(true);
@@ -177,7 +180,8 @@ const StrList = () => {
 		account_number,
 		transaction_id,
 		customer_id,
-		reason
+		reason,
+		file_name
 	) => {
 		console.log(id);
 		updateID = id;
@@ -189,6 +193,7 @@ const StrList = () => {
 			transaction_id: transaction_id,
 			customer_id: customer_id,
 			reason: reason,
+			file_name: file_name,
 		});
 
 		setOpenFileUploadCustomer(true);
@@ -200,7 +205,8 @@ const StrList = () => {
 		account_number,
 		transaction_id,
 		customer_id,
-		reason
+		reason,
+		file_name
 	) => {
 		console.log(id);
 		updateID = id;
@@ -212,6 +218,7 @@ const StrList = () => {
 			transaction_id: transaction_id,
 			customer_id: customer_id,
 			reason: reason,
+			file_name: file_name,
 		});
 
 		setOpenDetailCustomer(true);
@@ -361,7 +368,8 @@ const StrList = () => {
 								row.transaction_id,
 
 								row.customer_id,
-								row.reason
+								row.reason,
+								row.file_name
 							)
 						}
 					>
@@ -457,16 +465,6 @@ const StrList = () => {
 			title="Suspicious Transaction List "
 			breadcrumbs={[{ name: "Forms", active: true }]}
 		>
-			{/* <Popup
-				trigger={
-					<div ref={myRefname}>
-						<button style={{ visibility: "hidden" }} ref={myRefname} />
-					</div>
-				}
-			>
-				<FileUpload />
-			</Popup> */}
-
 			{isLoggedIn ? (
 				<Container>
 					{!dataFetched ? <LinearProgress /> : ""}
