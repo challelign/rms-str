@@ -135,7 +135,7 @@ strList.updateById = (
       customer_branch,
       branch,
       customer.customer_name,
-      customer.account_id,
+      customer.customer_id,
       customer.account_number,
       customer.transaction_id,
       customer.reason,
