@@ -7,19 +7,21 @@ const connection = mysql.createConnection({
   user: config.USER,
   password: config.PASSWORD,
   database: config.DATABASE,
-  
 });
 
 // open the MySql connection
-function connectDB(){
-connection.connect((error) => {
-  if (error) { console.error("Retrying");
-        // I suggest using some variable to avoid the infinite loop.
-        setTimeout(connectDB, 2000);}
-  // eslint-disable-next-line no-console
-  console.log("Database connected successfully :) !");
-});
-};
+function connectDB() {
+  connection.connect((error) => {
+    if (error) {
+      console.error("Retrying");
+      console.error("Database connection failed, Retrying");
+      // I suggest using some variable to avoid the infinite loop.
+      setTimeout(connectDB, 2000);
+    }
+    // eslint-disable-next-line no-console
+    else console.log("Database connected successfully :) !");
+  });
+}
 connectDB();
 
 module.exports = connection;
