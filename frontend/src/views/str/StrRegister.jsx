@@ -39,18 +39,14 @@ const StrRegister = (props) => {
 	const saveCustomer = () => {
 		// Create a FormData object
 
-		// uploading file is optional
-		// if (files.length === 0) {
-		// 	setErrorMessage("No file selected. Please choose a file.");
-		// 	return;
-		// }
-
 		const formData = new FormData();
 		const allowedTypes = [
-			"application/pdf",
+			// "application/pdf",
 			"application/zip",
-			"image/jpeg",
-			"image/png",
+			// "image/jpeg",
+			// "image/png",
+			"application/x-rar-compressed",
+			"application/x-zip-compressed",
 		];
 
 		for (let i = 0; i < files.length; i++) {
@@ -58,9 +54,7 @@ const StrRegister = (props) => {
 
 			const file = files[i];
 			if (!allowedTypes.includes(file.type)) {
-				setErrorMessage(
-					"Invalid file type. Please select a PDF, ZIP, JPEG, or PNG file."
-				);
+				setErrorMessage("Invalid file type. Please select a  ZIP file only.");
 				return;
 			}
 			formData.append("files", file);
@@ -160,7 +154,7 @@ const StrRegister = (props) => {
 				) : (
 					""
 				)}
-				<CardHeader title="Suspicious Transaction registration" />
+				<CardHeader title="Suspicious Transaction registration (Upload ZIP File only) " />
 				<Divider />
 				<CardContent>
 					<Grid container spacing={3}>
@@ -172,8 +166,6 @@ const StrRegister = (props) => {
 								readOnly={false}
 								onChange={handleChange}
 								required
-								//value={destination_branch}
-
 								variant="outlined"
 							/>
 						</Grid>
@@ -243,8 +235,9 @@ const StrRegister = (props) => {
 						<Grid item>
 							<input
 								type="file"
-								accept="file/*"
-								multiple
+								// accept="file/*"
+								accept=".zip,application/zip"
+								// multiple
 								name="files"
 								onChange={handleFileChange}
 								style={{ display: "none" }}
@@ -284,15 +277,6 @@ const StrRegister = (props) => {
 								</Typography>
 							)}
 						</Grid>
-						{/* <Grid item>
-							<Button
-								variant="contained"
-								color="primary"
-								onClick={handleUpload}
-							>
-								Upload
-							</Button>
-						</Grid> */}
 					</Grid>
 				</CardContent>
 

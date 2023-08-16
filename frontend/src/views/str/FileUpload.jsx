@@ -26,26 +26,29 @@ const FileUpload = ({ id, values }) => {
 	const saveFileUpload = () => {
 		const formData = new FormData();
 		const allowedTypes = [
-			"application/pdf",
+			"application/x-rar-compressed",
+			"application/x-zip-compressed",
+			// 	"application/pdf",
 			"application/zip",
-			"image/jpeg",
-			"image/png",
+			// 	"image/jpeg",
+			// 	"image/png",
 		];
 
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i];
 			if (!allowedTypes.includes(file.type)) {
-				setErrorMessage(
-					"Invalid file type. Please select a PDF, ZIP, JPEG, or PNG file."
-				);
+				// alert(file.type);
+				setErrorMessage("Invalid file type. Please select  ZIPfile.");
 				return;
 			}
 			if (file === null) {
-				setErrorMessage(" Please select a PDF, ZIP, JPEG, or PNG file.");
+				setErrorMessage(" Please select   ZIP  file.");
 				return;
 			}
+			console.log("Files ==============>", file.type);
+
 			formData.append("files", file);
-			// console.log("Files ==============>", file);
+			console.log("Files ==============>", file.type);
 		}
 
 		if (files.length === 0) {
@@ -55,7 +58,7 @@ const FileUpload = ({ id, values }) => {
 			try {
 				// alert(id);
 				axios
-					.post(url + "/str/" + id, formData, {
+					.put(url + "/str/upload/" + id, formData, {
 						withCredentials: true,
 					})
 					.then((res) => {
@@ -111,7 +114,7 @@ const FileUpload = ({ id, values }) => {
 				) : (
 					""
 				)}
-				<CardHeader title="Suspicious Transaction registration" />
+				<CardHeader title="Suspicious Transaction registration (Upload ZIP File only) " />
 				<Divider />
 				<CardContent>
 					{/* <p>{id}</p> */}
@@ -119,8 +122,9 @@ const FileUpload = ({ id, values }) => {
 						<Grid item>
 							<input
 								type="file"
-								accept="file/*"
-								multiple
+								// accept="file/*"
+								accept=".zip,application/zip"
+								// multiple
 								name="files"
 								onChange={handleFileChange}
 								id="file-upload"
