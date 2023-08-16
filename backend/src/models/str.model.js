@@ -1,4 +1,5 @@
 const db = require("./database");
+const file = require("../utils/file");
 
 const tableName = "str_list";
 // constructor
@@ -163,25 +164,41 @@ strList.updateById = (
 
 strList.updateFileById = (id, file_name, result) => {
   const sql = `SELECT file_name FROM ${tableName} WHERE id = ? `;
-  con.query(sql, function (err, result) {
-    if (err) result(null, err);
-    console.log(result);
+  let old_file_name = "";
+  db.query(sql, [id], (err, res) => {
+    if (err) {
+      result(null, err);
+      return;
+    }
+    old_file_name = res[0].file_name;
+    if (old_file_name !== "") {
+      if (!old_file_name.includes(",")) {
+        file.deleteFile(old_file_name);
+      } else {
+        const fileNamesArray = old_file_name.split(",");
+        console.log(fileNamesArray);
+
+        fileNamesArray.forEach((fileName) => {
+          file.deleteFile(fileName);
+        });
+      }
+    }
   });
-  // const sql2 = `UPDATE ${tableName} SET file_name = ? WHERE id = ? `;
-  // db.query(sql2, [file_name, id], (err, res) => {
-  //   if (err) {
-  //     result(null, err);
-  //     return;
-  //   }
 
-  //   if (res.affectedRows === 0) {
-  //     // not found Customer with the id
-  //     result({ result: "not_found" }, null);
-  //     return;
-  //   }
+  const sql2 = `UPDATE ${tableName} SET file_name = ? WHERE id = ? `;
+  db.query(sql2, [file_name, id], (err, res) => {
+    if (err) {
+      result(null, err);
+      return;
+    }
 
-  //   result(null, { id, file_name });
-  // });
+    if (res.affectedRows === 0) {
+      result({ result: "not_found" }, null);
+      return;
+    }
+
+    result(null, { id, file_name });
+  });
 };
 
 module.exports = strList;
