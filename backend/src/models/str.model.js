@@ -116,17 +116,24 @@ strList.remove = (id, result) => {
   });
 };
 
-strList.updateById = (id, customer, user_id, branch_code, branch, result) => {
-  const sql = `UPDATE ${tableName} SET user_id = ?, 	branch_code = ?, 	branch = ?, company_name = ?,  account_number = ?  WHERE id = ? `;
+strList.updateById = (
+  id,
+  customer,
+  user_id,
+  customer_branch,
+  branch,
+  result
+) => {
+  const sql = `UPDATE ${tableName} SET user_id = ?, 	customer_branch = ?, 	branch = ?, customer_name = ?,  account_number = ?  WHERE id = ? `;
   console.log("customer log from front sql ", customer);
 
   db.query(
     sql,
     [
       user_id,
-      branch_code,
+      customer_branch,
       branch,
-      customer.company_name,
+      customer.customer_name,
       customer.account_number,
       id,
     ],

@@ -171,11 +171,12 @@ exports.updateCustomer = (req, res) => {
       .send({ status: "FAILURE", message: "Content can not be empty!" });
 
   const { customerId } = req.params;
-  const data1 = new Str_List(req.body);
+  const data = new Str_List(req.body);
+  console.log(data);
 
   Str_List.updateById(
     customerId,
-    data1,
+    data,
     req.session.user_id,
     req.session.branch_code,
     req.session.branch,
