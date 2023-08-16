@@ -1,31 +1,6 @@
 const Str_List = require("../models/str.model");
 const file = require("../utils/file");
 
-// exports.uploads = (req, res) => {
-//   file.upload(req, res, (err) => {
-//     if (err) {
-//       return res.status(500).json({
-//         status: "FAILURE",
-//         message: "Error uploading files",
-//       });
-//     }
-//     const files = req.files;
-//     res.status(200).json({
-//       status: "SUCCESS",
-//       message: "Files uploaded successfully",
-//       fileCount: files.length,
-//     });
-//   });
-// };
-
-// exports.deleteFile = (req, res) => {
-//   const { fileName } = req.body;
-//   file.deleteFile(fileName);
-//   res.status(200).json({
-//     message: "Files deleted successfully",
-//   });
-// };
-
 exports.create = (req, res) => {
   // validate request
   if (!req.session.autenticated)
@@ -208,7 +183,6 @@ exports.updateFile = (req, res) => {
     return res
       .status(401)
       .send({ status: "FAILURE", authorized: false, message: "Unauthorized" });
-  // validate request
   if (!req.body)
     return res
       .status(400)
@@ -223,8 +197,6 @@ exports.updateFile = (req, res) => {
     }
     const files = req.files;
     const { id } = req.params;
-    console.log(files);
-    console.log(id);
     if (!files)
       return res
         .status(400)
