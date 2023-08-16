@@ -124,7 +124,7 @@ strList.updateById = (
   branch,
   result
 ) => {
-  const sql = `UPDATE ${tableName} SET user_id = ?, 	customer_branch = ?, 	branch = ?, customer_name = ?,  account_number = ?  WHERE id = ? `;
+  const sql = `UPDATE ${tableName} SET user_id = ?,customer_branch = ?,branch = ?, customer_name = ?,  customer_id = ?, account_number = ?,transaction_id=?,reason=?,address=? WHERE id = ? `;
   console.log("customer log from front sql ", customer);
 
   db.query(
@@ -134,7 +134,11 @@ strList.updateById = (
       customer_branch,
       branch,
       customer.customer_name,
+      customer.account_id,
       customer.account_number,
+      customer.transaction_id,
+      customer.reason,
+      customer.address,
       id,
     ],
 

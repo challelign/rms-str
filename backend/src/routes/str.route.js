@@ -5,5 +5,5 @@ module.exports = (app) => {
     str.findAll
   );
   app.post("/str", str.create);
-  app.put("/str/:customerId", str.updateCustomer);
+  app.put("/str/:id", str.updateCustomer);
 };

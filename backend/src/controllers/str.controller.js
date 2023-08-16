@@ -170,12 +170,13 @@ exports.updateCustomer = (req, res) => {
       .status(400)
       .send({ status: "FAILURE", message: "Content can not be empty!" });
 
-  const { customerId } = req.params;
+  const { id } = req.params;
   const data = new Str_List(req.body);
-  console.log(data);
+  console.log(req.body);
+  console.log(req.params);
 
   Str_List.updateById(
-    customerId,
+    id,
     data,
     req.session.user_id,
     req.session.branch_code,
@@ -184,14 +185,15 @@ exports.updateCustomer = (req, res) => {
       if (err) {
         // eslint-disable-next-line no-unused-expressions
 
-        err.result === "not_found"
-          ? res
-              .status(404)
-              .send({ message: `Not found customer with id ${customerId}` })
-          : res.status(500).send({
-              message: `Could not update customer with id ${customerId}`,
-            });
-        // return result;
+        const result =
+          err.result === "not_found"
+            ? res
+                .status(404)
+                .send({ message: `Not found customer with id ${id}` })
+            : res.status(500).send({
+                message: `Could not update customer with id ${id}`,
+              });
+        return result;
       } else
         return res.send({
           message: "Customer data updated successfully!",
