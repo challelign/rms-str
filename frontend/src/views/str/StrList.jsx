@@ -38,6 +38,8 @@ import ClearIcon from "@material-ui/icons/Clear";
 import { Navigate } from "react-router-dom";
 import Slide from "@material-ui/core/Slide";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
+import { CloudUpload as CloudUploadIcon } from "@material-ui/icons";
+import moment from "moment";
 
 import { url } from "../../url";
 import StrRegister from "./StrRegister";
@@ -98,6 +100,7 @@ const StrList = () => {
 		customer_id: "",
 		reason: "",
 		file_name: "",
+		created_at: "",
 	});
 
 	const [openCreate, setOpenCreate] = useState(false);
@@ -115,10 +118,17 @@ const StrList = () => {
 	const [openDetailCustomer, setOpenDetailCustomer] = useState(false);
 	const [openEdit, setOpenEdit] = React.useState(false);
 	const [errorMessage2, setErrorMessage2] = useState("");
-
+	const [errorMessage, setErrorMessage] = useState("");
+	const [files, setFiles] = useState([
+		// "chalie.mp4",
+		// "chalie.mp4",
+		// "chalie.mp4",
+	]);
 	const [paginationReset, setPaginationReset] = useState(false);
 	const countPerPage = 6;
-
+	const handleFileChange = (event) => {
+		setFiles(event.target.files);
+	};
 	const createSTRUser = () => {
 		setOpenCreate(true);
 	};
@@ -128,6 +138,7 @@ const StrList = () => {
 			[event.target.name]: event.target.value,
 		});
 	};
+
 	const handleClose = () => {
 		setOpen(false);
 		setdeleteConfirmOpen(false);
@@ -155,7 +166,8 @@ const StrList = () => {
 		account_number,
 		transaction_id,
 		customer_id,
-		reason
+		reason,
+		created_at
 		// file_name
 	) => {
 		console.log(id);
@@ -168,6 +180,7 @@ const StrList = () => {
 			transaction_id: transaction_id,
 			customer_id: customer_id,
 			reason: reason,
+			created_at: created_at,
 			// file_name: file_name,
 		});
 
@@ -181,7 +194,8 @@ const StrList = () => {
 		account_number,
 		transaction_id,
 		customer_id,
-		reason
+		reason,
+		created_at
 		// file_name
 	) => {
 		console.log(id);
@@ -194,6 +208,7 @@ const StrList = () => {
 			transaction_id: transaction_id,
 			customer_id: customer_id,
 			reason: reason,
+			created_at: created_at,
 			// file_name: file_name,
 		});
 
@@ -207,7 +222,8 @@ const StrList = () => {
 		transaction_id,
 		customer_id,
 		reason,
-		file_name
+		file_name,
+		created_at
 	) => {
 		console.log(id);
 		updateID = id;
@@ -220,6 +236,7 @@ const StrList = () => {
 			customer_id: customer_id,
 			reason: reason,
 			file_name: file_name,
+			created_at: created_at,
 		});
 
 		setOpenDetailCustomer(true);
@@ -228,18 +245,25 @@ const StrList = () => {
 	const editStrCustomer = () => {
 		if (values.customer_id.trim() === "") {
 			setErrorMessage2("Please provide Customer ID");
+			return;
 		} else if (values.customer_name.trim() === "") {
 			setErrorMessage2("Please provide Customer Name");
+			return;
 		} else if (values.transaction_id.trim() === "") {
 			setErrorMessage2("Please provide Transaction Id");
+			return;
 		} else if (values.address.trim() === "") {
 			setErrorMessage2("Please provide address");
+			return;
 		} else if (values.account_number.trim() === "") {
 			setErrorMessage2("Account number length must be 16 digit.");
+			return;
 		} else if (values.account_number.length !== 16) {
 			setErrorMessage2("Account number length must be 16 digit.");
+			return;
 		} else if (values.reason.trim() === "") {
 			setErrorMessage2("Please provide reason");
+			return;
 		} else {
 			axios
 				.put(
@@ -295,6 +319,103 @@ const StrList = () => {
 		event.preventDefault();
 		editStrCustomer(); // Save  when form is submitted
 	};
+	/* 	const saveCustomerFileUpload = () => {
+		// Create a FormData object
+		if (files.length === 0) {
+			setErrorMessage("No file selected. Please choose a file.");
+			return;
+		}
+		const formData = new FormData();
+		const allowedTypes = [
+			"application/pdf",
+			"application/zip",
+			"image/jpeg",
+			"image/png",
+		];
+
+		for (let i = 0; i < files.length; i++) {
+			// formData.append("files", files[i]);
+
+			const file = files[i];
+			if (!allowedTypes.includes(file.type)) {
+				setErrorMessage(
+					"Invalid file type. Please select a PDF, ZIP, JPEG, or PNG file."
+				);
+				return;
+			}
+			formData.append("files", file);
+			console.log("Files ==============>", file);
+		}
+
+		// formData.append("customer_name", values.customer_name);
+		// formData.append("transaction_id", values.transaction_id);
+		// formData.append("customer_id", values.customer_id);
+		// formData.append("reason", values.reason);
+		// formData.append("address", values.address);
+		// formData.append("account_number", values.account_number);
+
+		// if (values.customer_id.trim() === "") {
+		// 	setErrorMessage("Please provide Customer ID");
+		// } else if (values.customer_name.trim() === "") {
+		// 	setErrorMessage("Please provide Customer Name");
+		// } else if (values.transaction_id.trim() === "") {
+		// 	setErrorMessage("Please provide Transaction Id");
+		// } else if (values.reason.trim() === "") {
+		// 	setErrorMessage("Please provide reason");
+		// } else if (values.address.trim() === "") {
+		// 	setErrorMessage("Please provide address");
+		// } else if (values.account_number.trim() === "") {
+		// 	setErrorMessage("Account number length must be 16 digit.");
+		// } else if (values.account_number.length !== 16) {
+		// 	setErrorMessage("Account number length must be 16 digit.");
+		// } else {
+		// axios
+		// 	.post(url + "/str", formData, {
+		// 		withCredentials: true,
+		// 	})
+		// 	.then((res) => {
+		// 		if (res.data.status === "Success") {
+		// 			console.log(res.data);
+		// 			console.log("succeded");
+		// 		} else {
+		// 			console.log("Failed");
+		// 		}
+		// 	})
+		// 	.then(
+		// 		(data) => {
+		// 			alert("Customer Detail saved");
+		// 			window.location.reload(false);
+		// 		}
+		// ,
+		// (error) => {
+		// 	alert("Connection to the server failed");
+		// 	console.log(formData);
+		// }
+		// )
+		// .catch((error) => {
+		// 	if (!error?.response) {
+		// 		setErrorMessage("No Server Response");
+		// 	} else if (error?.code === AxiosError.ERR_NETWORK) {
+		// 		setErrorMessage("Network Error");
+		// 	} else if (error.response?.status === 404) {
+		// 		setErrorMessage("404 - Not Found");
+		// 	} else if (error?.code) {
+		// 		setErrorMessage("Code: " + error.code);
+		// 	} else {
+		// 		setErrorMessage("Unknown Error");
+		// 	}
+		// });
+		// }
+
+		console.log(formData);
+	};
+
+	const handleSubmit = (event) => {
+		event.preventDefault();
+		saveCustomerFileUpload(); // Save  when form is submitted
+	}; */
+	// const date = new Date(row.created_at);
+
 	const columns = [
 		{
 			name: "Customer Name",
@@ -313,35 +434,82 @@ const StrList = () => {
 			name: "ID Number",
 			selector: (row) => row.customer_id,
 		},
+		{
+			name: "created_at",
+			selector: (row) => moment(row.created_at).fromNow(),
+			// moment(timestamp).fromNow()
+			// selector: (row) =>
+			// 	new Date().getHours() -
+			// 	new Date(row.created_at).getHours() +
+			// 	" Hours Ago",
+		},
 
 		{
-			name: "Upload",
-			cell: (row) =>
-				row.id != null ? (
-					<Button
-						color="primary"
-						onClick={() =>
-							clickFileUpload(
-								row.id,
-								row.customer_name,
-								row.address,
-								row.account_number,
-								row.transaction_id,
-								row.customer_id
-							)
-						}
-					>
-						File Upload
-					</Button>
-				) : (
-					""
-				),
+			name: "Upload File",
+			cell: (row) => {
+				const createdDate = moment().diff(moment(row.created_at), "hours");
+				// new Date().getHours() - new Date(row.created_at).getHours();
+
+				if (createdDate < 2) {
+					return (
+						<Button
+							color="primary"
+							onClick={() =>
+								clickFileUpload(
+									row.id,
+									row.customer_name,
+									row.address,
+									row.account_number,
+									row.transaction_id,
+									row.customer_id
+									// row.file_name
+								)
+							}
+						>
+							File Upload
+						</Button>
+					);
+				}
+				return `Upload Mode Disabled`;
+			},
 			ignoreRowClick: true,
 			allowOverflow: true,
 			button: true,
 		},
 
 		{
+			name: "Edit",
+			cell: (row) => {
+				const createdDate = moment().diff(moment(row.created_at), "hours");
+
+				if (createdDate < 2) {
+					return (
+						<Button
+							color="primary"
+							onClick={() =>
+								editClicked(
+									row.id,
+									row.customer_name,
+									row.address,
+									row.account_number,
+									row.transaction_id,
+									row.customer_id,
+									row.reason
+								)
+							}
+						>
+							<EditIcon style={{ fill: "#00094B" }} />
+						</Button>
+					);
+				}
+				return "Edit mode Disabled";
+			},
+			ignoreRowClick: true,
+			allowOverflow: true,
+			button: true,
+		},
+
+		/* 	{
 			name: "Edit",
 			cell: (row) =>
 				row.id != null ? (
@@ -369,6 +537,7 @@ const StrList = () => {
 			button: true,
 		},
 
+		 */
 		{
 			name: "Detail",
 
@@ -729,49 +898,73 @@ const StrList = () => {
 							aria-describedby="alert-dialog-slide-description"
 						>
 							<DialogTitle id="alert-dialog-slide-title">
-								{"Suspicious Transaction Customer "} {values.customer_name}
+								{"Suspicious Transaction Supported Documents "}
+								{" For "}
+								<Typography variant="h4">{values.customer_name}</Typography>
 							</DialogTitle>
 							<DialogContent>
-								{/* <form autoComplete="off" noValidate onSubmit={handleSubmitEdit}>
+								<FileUpload id={updateID} />
+
+								{/* 	<form
+									autoComplete="off"
+									noValidate
+									onSubmit={handleSubmit}
+									enctype="multipart/form-data"
+								>
 									<Card>
-										{errorMessage2 != "" ? (
+										{errorMessage !== "" ? (
 											<div className="error">
-												<Alert severity="warning">{errorMessage2}</Alert>
+												<Alert severity="warning">{errorMessage}</Alert>
 											</div>
 										) : (
 											""
 										)}
-										<CardHeader />
+										<CardHeader title="Suspicious Transaction File Upload" />
 										<Divider />
+										<CardContent>
+											<Grid container spacing={2} alignItems="center">
+												<Grid item>
+													<input
+														type="file"
+														accept="file/*"
+														multiple
+														name="files"
+														onChange={handleFileChange}
+														id="file-upload"
+													/>
+												</Grid>
+												<Grid item>
+													<Typography variant="body1">
+														{files.length} file(s) selected
+													</Typography>
+												</Grid>
+												<Grid item>
+													{files.length > 0 && (
+														<Typography variant="body1">
+															Selected files:
+															{Array.from(files).map((file, index) => (
+																<>
+																	<p key={file.name}>
+																		{index + 1} . {file.name}
+																		<br />
+																	</p>
+																</>
+															))}
+														</Typography>
+													)}
+												</Grid>
+											</Grid>
+										</CardContent>
 
-										<CardHeader title="Suspicious Transaction registration" />
 										<Divider />
-										<CardContent></CardContent>
-
 										<Box display="flex" justifyContent="flex-end" p={2}>
-											<Grid>
-												{" "}
-												<Button
-													onClick={handleCloseEdit}
-													variant="outlined"
-													color="primary"
-												>
-													Close
-												</Button>
-											</Grid>
-											<Grid>
-												<Button
-													variant="outlined"
-													color="primary"
-													type="submit"
-												>
-													Create
-												</Button>
-											</Grid>
+											<Button color="primary" variant="contained" type="submit">
+												Save details
+											</Button>
 										</Box>
 									</Card>
 								</form> */}
-								<FileUpload id={updateID} />
+
 								<Box display="flex" justifyContent="flex-end" p={2}>
 									<Grid>
 										<Button
