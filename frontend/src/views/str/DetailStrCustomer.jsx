@@ -72,13 +72,7 @@ const DetailStrCustomer = ({ values }) => {
 						{values.reason}
 					</Typography>
 					<Divider />
-					{/* {singleFile.length > 1 ? (
-						<Typography gutterBottom variant="h5" component="div">
-							Supported Documents ({singleFile.length})
-						</Typography>
-					) : (
-						"No Supported Documents"
-					)} */}
+
 					<Typography gutterBottom variant="h5" component="div">
 						Supported Documents (
 						{singleFile.length > 1 ? singleFile.length : ""})
