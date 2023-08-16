@@ -202,3 +202,55 @@ exports.updateCustomer = (req, res) => {
     }
   );
 };
+
+exports.updateFile = (req, res) => {
+  if (!req.session.autenticated)
+    return res
+      .status(401)
+      .send({ status: "FAILURE", authorized: false, message: "Unauthorized" });
+  // validate request
+  if (!req.body)
+    return res
+      .status(400)
+      .send({ status: "FAILURE", message: "Content can not be empty!" });
+
+  file.upload(req, res, (err) => {
+    if (err) {
+      return res.status(500).json({
+        status: "FAILURE",
+        message: "Failed to upload file",
+      });
+    }
+    const files = req.files;
+    const { id } = req.params;
+    console.log(files);
+    console.log(id);
+    if (!files)
+      return res
+        .status(400)
+        .send({ status: "FAILURE", message: "File can not be empty!" });
+
+    let fileNames = files?.map((file) => file.filename);
+    fileNames = fileNames?.join(", ");
+
+    Str_List.updateFileById(id, fileNames, (err, data) => {
+      if (err) {
+        // eslint-disable-next-line no-unused-expressions
+
+        const result =
+          err.result === "not_found"
+            ? res
+                .status(404)
+                .send({ message: `Not found customer with id ${id}` })
+            : res.status(500).send({
+                message: `Could not update customer with id ${id}`,
+              });
+        return result;
+      } else
+        return res.send({
+          message: "File updated successfully!",
+          data,
+        });
+    });
+  });
+};

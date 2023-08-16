@@ -161,35 +161,27 @@ strList.updateById = (
   );
 };
 
-strList.updateStatusById = (id, data, user_id, branch_code, branch, result) => {
-  const sql = `UPDATE ${tableName} SET user_id = ?, branch_code = ?, branch = ?, action = ?, 	account_number = ?, message = ? WHERE id = ? `;
-  console.log(data);
-  db.query(
-    sql,
-    [
-      user_id,
-      branch_code,
-      branch,
-      data.action,
-      data.account_number,
-      data.message,
-      id,
-    ],
-    (err, res) => {
-      if (err) {
-        result(null, err);
-        return;
-      }
+strList.updateFileById = (id, file_name, result) => {
+  const sql = `SELECT file_name FROM ${tableName} WHERE id = ? `;
+  con.query(sql, function (err, result) {
+    if (err) result(null, err);
+    console.log(result);
+  });
+  // const sql2 = `UPDATE ${tableName} SET file_name = ? WHERE id = ? `;
+  // db.query(sql2, [file_name, id], (err, res) => {
+  //   if (err) {
+  //     result(null, err);
+  //     return;
+  //   }
 
-      if (res.affectedRows === 0) {
-        // not found Customer with the id
-        result({ result: "not_found" }, null);
-        return;
-      }
+  //   if (res.affectedRows === 0) {
+  //     // not found Customer with the id
+  //     result({ result: "not_found" }, null);
+  //     return;
+  //   }
 
-      result(null, { id, ...data });
-    }
-  );
+  //   result(null, { id, file_name });
+  // });
 };
 
 module.exports = strList;
