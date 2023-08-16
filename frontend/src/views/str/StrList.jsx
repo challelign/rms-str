@@ -100,10 +100,7 @@ const StrList = () => {
     customer_id: "",
     reason: "",
     file_name: "",
-<<<<<<< HEAD
-=======
     created_at: "",
->>>>>>> main
   });
 
   const [openCreate, setOpenCreate] = useState(false);
@@ -121,23 +118,6 @@ const StrList = () => {
   const [openDetailCustomer, setOpenDetailCustomer] = useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [errorMessage2, setErrorMessage2] = useState("");
-<<<<<<< HEAD
-
-  const [paginationReset, setPaginationReset] = useState(false);
-  const countPerPage = 6;
-
-  const createSTRUser = () => {
-    setOpenCreate(true);
-  };
-  const handleChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value,
-    });
-  };
-  const handleClose = () => {
-    setOpen(false);
-=======
   const [errorMessage, setErrorMessage] = useState("");
   const [files, setFiles] = useState([
     // "chalie.mp4",
@@ -169,54 +149,10 @@ const StrList = () => {
 
   const handleCloseEdit = () => {
     setOpenEdit(false);
->>>>>>> main
     setdeleteConfirmOpen(false);
     setOpenEdit(false);
     setOpenCreate(false);
     // setLoadPayment(false);
-<<<<<<< HEAD
-  };
-
-  const handleCloseEdit = () => {
-    setOpenEdit(false);
-    setdeleteConfirmOpen(false);
-    setOpenEdit(false);
-    setOpenCreate(false);
-    // setLoadPayment(false);
-    setOpenEditCustomer(false);
-    setOpenDetailCustomer(false);
-    setOpenFileUploadCustomer(false);
-  };
-  const myRefname = useRef(null);
-
-  const editClicked = (
-    id,
-    customer_name,
-    address,
-    account_number,
-    transaction_id,
-    customer_id,
-    reason,
-    file_name
-  ) => {
-    console.log(id);
-    updateID = id;
-    setValues({
-      ...values,
-      customer_name: customer_name,
-      address: address,
-      account_number: account_number,
-      transaction_id: transaction_id,
-      customer_id: customer_id,
-      reason: reason,
-      file_name: file_name,
-    });
-
-    setOpenEditCustomer(true);
-  };
-
-  const clickFileUpload = (
-=======
     setOpenEditCustomer(false);
     setOpenDetailCustomer(false);
     setOpenFileUploadCustomer(false);
@@ -279,7 +215,6 @@ const StrList = () => {
     setOpenFileUploadCustomer(true);
   };
   const detailClicked = (
->>>>>>> main
     id,
     customer_name,
     address,
@@ -287,12 +222,8 @@ const StrList = () => {
     transaction_id,
     customer_id,
     reason,
-<<<<<<< HEAD
-    file_name
-=======
     file_name,
     created_at
->>>>>>> main
   ) => {
     console.log(id);
     updateID = id;
@@ -305,65 +236,6 @@ const StrList = () => {
       customer_id: customer_id,
       reason: reason,
       file_name: file_name,
-<<<<<<< HEAD
-    });
-
-    setOpenFileUploadCustomer(true);
-  };
-  const detailClicked = (
-    id,
-    customer_name,
-    address,
-    account_number,
-    transaction_id,
-    customer_id,
-    reason,
-    file_name
-  ) => {
-    console.log(id);
-    updateID = id;
-    setValues({
-      ...values,
-      customer_name: customer_name,
-      address: address,
-      account_number: account_number,
-      transaction_id: transaction_id,
-      customer_id: customer_id,
-      reason: reason,
-      file_name: file_name,
-    });
-
-    setOpenDetailCustomer(true);
-  };
-
-  const editStrCustomer = () => {
-    alert(values.reason);
-    if (values.customer_id.trim() === "") {
-      setErrorMessage2("Please provide Customer ID");
-    } else if (values.customer_name.trim() === "") {
-      setErrorMessage2("Please provide Customer Name");
-    } else if (values.transaction_id.trim() === "") {
-      setErrorMessage2("Please provide Transaction Id");
-    } else if (values.address.trim() === "") {
-      setErrorMessage2("Please provide address");
-    } else if (values.account_number.trim() === "") {
-      setErrorMessage2("Account number length must be 16 digit.");
-    } else if (values.account_number.length !== 16) {
-      setErrorMessage2("Account number length must be 16 digit.");
-    } else if (values.reason.trim() === "") {
-      setErrorMessage2("Please provide reason");
-    } else {
-      axios
-        .put(
-          url + "/str/" + updateID,
-          {
-            customer_id: values.customer_id,
-            customer_name: values.customer_name,
-            address: values.address,
-            transaction_id: values.transaction_id,
-            reason: values.reason,
-            account_number: values.account_number,
-=======
       created_at: created_at,
     });
 
@@ -404,7 +276,6 @@ const StrList = () => {
 
             account_number: values.account_number,
             reason: values.reason,
->>>>>>> main
           },
           { withCredentials: true }
         )
@@ -418,15 +289,6 @@ const StrList = () => {
         })
         .then(
           (data) => {
-<<<<<<< HEAD
-            window.location.reload(false);
-            /* */
-          },
-          (error) => {
-            alert("Connection to the server failed");
-          }
-        );
-=======
             alert("Customer Detail saved");
             window.location.reload(false);
           }
@@ -449,7 +311,6 @@ const StrList = () => {
             setErrorMessage2("Unknown Error");
           }
         });
->>>>>>> main
     }
     console.log(values.account_number);
     console.log(updateID);
@@ -458,75 +319,6 @@ const StrList = () => {
     event.preventDefault();
     editStrCustomer(); // Save  when form is submitted
   };
-<<<<<<< HEAD
-  const columns = [
-    {
-      name: "Customer Name",
-      // selector: "customer_name",
-      selector: (row) => row.customer_name,
-    },
-    {
-      name: "Account Number",
-      selector: (row) => row.account_number,
-    },
-    {
-      name: "Transaction Id",
-      selector: (row) => row.transaction_id,
-    },
-    {
-      name: "ID Number",
-      selector: (row) => row.customer_id,
-    },
-
-    {
-      name: "Upload",
-      cell: (row) =>
-        row.id != null ? (
-          <Button
-            color="primary"
-            onClick={() =>
-              clickFileUpload(
-                row.id,
-                row.customer_name,
-                row.address,
-                row.account_number,
-                row.transaction_id,
-                row.customer_id
-              )
-            }
-          >
-            File Upload
-          </Button>
-        ) : (
-          ""
-        ),
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
-    },
-
-    {
-      name: "Edit",
-      cell: (row) =>
-        row.id != null ? (
-          <Button
-            onClick={() =>
-              editClicked(
-                row.id,
-                row.customer_name,
-                row.address,
-                row.account_number,
-                row.transaction_id,
-                row.customer_id
-              )
-            }
-          >
-            <EditIcon style={{ fill: "#00094B" }} />
-          </Button>
-        ) : (
-          ""
-        ),
-=======
   /* 	const saveCustomerFileUpload = () => {
 		// Create a FormData object
 		if (files.length === 0) {
@@ -739,17 +531,13 @@ const StrList = () => {
 				) : (
 					""
 				),
->>>>>>> main
 
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
-    },
+			ignoreRowClick: true,
+			allowOverflow: true,
+			button: true,
+		},
 
-<<<<<<< HEAD
-=======
 		 */
->>>>>>> main
     {
       name: "Detail",
 
@@ -782,15 +570,9 @@ const StrList = () => {
     },
   ];
 
-<<<<<<< HEAD
-  function handleChanges(newValue) {
-    setValues(newValue);
-  }
-=======
   // function handleChanges(newValue) {
   // 	setValues(newValue);
   // }
->>>>>>> main
 
   const searchTriggred = (event) => {
     event.preventDefault();
@@ -905,27 +687,12 @@ const StrList = () => {
             >
               <MuiDialogTitle disableTypography>
                 <Typography variant="h4">
-<<<<<<< HEAD
-                  {"ST Customer Detail "} {values.customer_name}
-=======
                   {"ST Customer Detail "} for {values.customer_name}
->>>>>>> main
                 </Typography>
               </MuiDialogTitle>
               {/* Detail STR Customer */}
               <DetailStrCustomer values={values} />
               <Box display="flex" justifyContent="flex-end" p={2}>
-<<<<<<< HEAD
-                <Grid>
-                  <Button
-                    onClick={handleCloseEdit}
-                    variant="outlined"
-                    color="primary"
-                  >
-                    Close
-                  </Button>
-                </Grid>
-=======
                 <Button
                   onClick={handleCloseEdit}
                   variant="outlined"
@@ -933,7 +700,6 @@ const StrList = () => {
                 >
                   Close
                 </Button>
->>>>>>> main
               </Box>
             </Dialog>
             {/* detail end */}
@@ -992,12 +758,8 @@ const StrList = () => {
               aria-describedby="alert-dialog-slide-description"
             >
               <DialogTitle id="alert-dialog-slide-title">
-<<<<<<< HEAD
-                {"Edit ST Customer Detail "} {values.customer_name}
-=======
                 {"Edit ST Customer Detail "}for {values.customer_name} id is{" "}
                 {updateID}
->>>>>>> main
               </DialogTitle>
               <DialogContent>
                 <form autoComplete="off" noValidate onSubmit={handleSubmitEdit}>
@@ -1091,11 +853,7 @@ const StrList = () => {
                             onChange={handleChange}
                             aria-label="minimum height"
                             variant="outlined"
-<<<<<<< HEAD
-                            value={values.reason ? values.reason.trim : ""}
-=======
                             value={values.reason}
->>>>>>> main
                           />
                         </Grid>
                         <Grid item md={6} xs={12}></Grid>
@@ -1119,11 +877,7 @@ const StrList = () => {
                           color="primary"
                           type="submit"
                         >
-<<<<<<< HEAD
-                          Create
-=======
                           Update
->>>>>>> main
                         </Button>
                       </Grid>
                     </Box>
@@ -1144,16 +898,6 @@ const StrList = () => {
               aria-describedby="alert-dialog-slide-description"
             >
               <DialogTitle id="alert-dialog-slide-title">
-<<<<<<< HEAD
-                {"Suspicious Transaction Customer "} {values.customer_name}
-              </DialogTitle>
-              <DialogContent>
-                {/* <form autoComplete="off" noValidate onSubmit={handleSubmitEdit}>
-									<Card>
-										{errorMessage2 != "" ? (
-											<div className="error">
-												<Alert severity="warning">{errorMessage2}</Alert>
-=======
                 {"Suspicious Transaction Supported Documents "}
                 {" For "}
                 <Typography variant="h4">{values.customer_name}</Typography>
@@ -1171,60 +915,10 @@ const StrList = () => {
 										{errorMessage !== "" ? (
 											<div className="error">
 												<Alert severity="warning">{errorMessage}</Alert>
->>>>>>> main
 											</div>
 										) : (
 											""
 										)}
-<<<<<<< HEAD
-										<CardHeader />
-										<Divider />
-
-										<CardHeader title="Suspicious Transaction registration" />
-										<Divider />
-										<CardContent></CardContent>
-
-										<Box display="flex" justifyContent="flex-end" p={2}>
-											<Grid>
-												{" "}
-												<Button
-													onClick={handleCloseEdit}
-													variant="outlined"
-													color="primary"
-												>
-													Close
-												</Button>
-											</Grid>
-											<Grid>
-												<Button
-													variant="outlined"
-													color="primary"
-													type="submit"
-												>
-													Create
-												</Button>
-											</Grid>
-										</Box>
-									</Card>
-								</form> */}
-                <FileUpload id={updateID} />
-                <Box display="flex" justifyContent="flex-end" p={2}>
-                  <Grid>
-                    <Button
-                      onClick={handleCloseEdit}
-                      variant="outlined"
-                      color="primary"
-                    >
-                      Close
-                    </Button>
-                  </Grid>
-                </Box>
-              </DialogContent>
-              <DialogActions></DialogActions>
-            </Dialog>
-          </Paper>
-
-=======
 										<CardHeader title="Suspicious Transaction File Upload" />
 										<Divider />
 										<CardContent>
@@ -1287,7 +981,6 @@ const StrList = () => {
             </Dialog>
           </Paper>
 
->>>>>>> main
           <DataTable
             title="Suspicious Transaction List"
             columns={columns}
