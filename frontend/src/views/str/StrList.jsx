@@ -877,7 +877,7 @@ const StrList = () => {
 													color="primary"
 													type="submit"
 												>
-													Create
+													Update
 												</Button>
 											</Grid>
 										</Box>
