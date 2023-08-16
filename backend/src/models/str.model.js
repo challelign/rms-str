@@ -1,4 +1,5 @@
 const db = require("./database");
+const file = require("../utils/file");
 
 const tableName = "str_list";
 // constructor
@@ -116,18 +117,29 @@ strList.remove = (id, result) => {
   });
 };
 
-strList.updateById = (id, customer, user_id, branch_code, branch, result) => {
-  const sql = `UPDATE ${tableName} SET user_id = ?, 	branch_code = ?, 	branch = ?, company_name = ?,  account_number = ?  WHERE id = ? `;
+strList.updateById = (
+  id,
+  customer,
+  user_id,
+  customer_branch,
+  branch,
+  result
+) => {
+  const sql = `UPDATE ${tableName} SET user_id = ?,customer_branch = ?,branch = ?, customer_name = ?,  customer_id = ?, account_number = ?,transaction_id=?,reason=?,address=? WHERE id = ? `;
   console.log("customer log from front sql ", customer);
 
   db.query(
     sql,
     [
       user_id,
-      branch_code,
+      customer_branch,
       branch,
-      customer.company_name,
+      customer.customer_name,
+      customer.account_id,
       customer.account_number,
+      customer.transaction_id,
+      customer.reason,
+      customer.address,
       id,
     ],
 
@@ -150,35 +162,43 @@ strList.updateById = (id, customer, user_id, branch_code, branch, result) => {
   );
 };
 
-strList.updateStatusById = (id, data, user_id, branch_code, branch, result) => {
-  const sql = `UPDATE ${tableName} SET user_id = ?, branch_code = ?, branch = ?, action = ?, 	account_number = ?, message = ? WHERE id = ? `;
-  console.log(data);
-  db.query(
-    sql,
-    [
-      user_id,
-      branch_code,
-      branch,
-      data.action,
-      data.account_number,
-      data.message,
-      id,
-    ],
-    (err, res) => {
-      if (err) {
-        result(null, err);
-        return;
-      }
-
-      if (res.affectedRows === 0) {
-        // not found Customer with the id
-        result({ result: "not_found" }, null);
-        return;
-      }
-
-      result(null, { id, ...data });
+strList.updateFileById = (id, file_name, result) => {
+  const sql = `SELECT file_name FROM ${tableName} WHERE id = ? `;
+  let old_file_name = "";
+  db.query(sql, [id], (err, res) => {
+    if (err) {
+      result(null, err);
+      return;
     }
-  );
+    old_file_name = res[0].file_name;
+    if (old_file_name !== "") {
+      if (!old_file_name.includes(",")) {
+        file.deleteFile(old_file_name);
+      } else {
+        const fileNamesArray = old_file_name.split(",");
+        console.log(fileNamesArray);
+
+        fileNamesArray.forEach((fileName) => {
+          file.deleteFile(fileName);
+        });
+      }
+    }
+  });
+
+  const sql2 = `UPDATE ${tableName} SET file_name = ? WHERE id = ? `;
+  db.query(sql2, [file_name, id], (err, res) => {
+    if (err) {
+      result(null, err);
+      return;
+    }
+
+    if (res.affectedRows === 0) {
+      result({ result: "not_found" }, null);
+      return;
+    }
+
+    result(null, { id, file_name });
+  });
 };
 
 module.exports = strList;
