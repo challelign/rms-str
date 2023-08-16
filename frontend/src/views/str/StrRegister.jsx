@@ -39,11 +39,34 @@ const StrRegister = (props) => {
 	const saveCustomer = () => {
 		// Create a FormData object
 
+		// uploading file is optional
+		// if (files.length === 0) {
+		// 	setErrorMessage("No file selected. Please choose a file.");
+		// 	return;
+		// }
+
 		const formData = new FormData();
+		const allowedTypes = [
+			"application/pdf",
+			"application/zip",
+			"image/jpeg",
+			"image/png",
+		];
 
 		for (let i = 0; i < files.length; i++) {
-			formData.append("files", files[i]);
+			// formData.append("files", files[i]);
+
+			const file = files[i];
+			if (!allowedTypes.includes(file.type)) {
+				setErrorMessage(
+					"Invalid file type. Please select a PDF, ZIP, JPEG, or PNG file."
+				);
+				return;
+			}
+			formData.append("files", file);
+			console.log("Files ==============>", file);
 		}
+
 		formData.append("customer_name", values.customer_name);
 		formData.append("transaction_id", values.transaction_id);
 		formData.append("customer_id", values.customer_id);
