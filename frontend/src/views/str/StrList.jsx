@@ -16,6 +16,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
+import { AxiosError } from "axios";
 
 import DataTable from "react-data-table-component";
 // import Page from 'src/components/Page';
@@ -37,6 +38,8 @@ import ClearIcon from "@material-ui/icons/Clear";
 import { Navigate } from "react-router-dom";
 import Slide from "@material-ui/core/Slide";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
+import { CloudUpload as CloudUploadIcon } from "@material-ui/icons";
+import moment from "moment";
 
 import { url } from "../../url";
 import StrRegister from "./StrRegister";
@@ -97,6 +100,10 @@ const StrList = () => {
     customer_id: "",
     reason: "",
     file_name: "",
+<<<<<<< HEAD
+=======
+    created_at: "",
+>>>>>>> main
   });
 
   const [openCreate, setOpenCreate] = useState(false);
@@ -114,6 +121,7 @@ const StrList = () => {
   const [openDetailCustomer, setOpenDetailCustomer] = useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [errorMessage2, setErrorMessage2] = useState("");
+<<<<<<< HEAD
 
   const [paginationReset, setPaginationReset] = useState(false);
   const countPerPage = 6;
@@ -129,10 +137,44 @@ const StrList = () => {
   };
   const handleClose = () => {
     setOpen(false);
+=======
+  const [errorMessage, setErrorMessage] = useState("");
+  const [files, setFiles] = useState([
+    // "chalie.mp4",
+    // "chalie.mp4",
+    // "chalie.mp4",
+  ]);
+  const [paginationReset, setPaginationReset] = useState(false);
+  const countPerPage = 6;
+  const handleFileChange = (event) => {
+    setFiles(event.target.files);
+  };
+  const createSTRUser = () => {
+    setOpenCreate(true);
+  };
+  const handleChange = (event) => {
+    setValues({
+      ...values,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const handleClose = () => {
+    setOpen(false);
     setdeleteConfirmOpen(false);
     setOpenEdit(false);
     setOpenCreate(false);
     // setLoadPayment(false);
+  };
+
+  const handleCloseEdit = () => {
+    setOpenEdit(false);
+>>>>>>> main
+    setdeleteConfirmOpen(false);
+    setOpenEdit(false);
+    setOpenCreate(false);
+    // setLoadPayment(false);
+<<<<<<< HEAD
   };
 
   const handleCloseEdit = () => {
@@ -174,6 +216,14 @@ const StrList = () => {
   };
 
   const clickFileUpload = (
+=======
+    setOpenEditCustomer(false);
+    setOpenDetailCustomer(false);
+    setOpenFileUploadCustomer(false);
+  };
+  const myRefname = useRef(null);
+
+  const editClicked = (
     id,
     customer_name,
     address,
@@ -181,7 +231,68 @@ const StrList = () => {
     transaction_id,
     customer_id,
     reason,
+    created_at
+    // file_name
+  ) => {
+    console.log(id);
+    updateID = id;
+    setValues({
+      ...values,
+      customer_name: customer_name,
+      address: address,
+      account_number: account_number,
+      transaction_id: transaction_id,
+      customer_id: customer_id,
+      reason: reason,
+      created_at: created_at,
+      // file_name: file_name,
+    });
+
+    setOpenEditCustomer(true);
+  };
+
+  const clickFileUpload = (
+    id,
+    customer_name,
+    address,
+    account_number,
+    transaction_id,
+    customer_id,
+    reason,
+    created_at
+    // file_name
+  ) => {
+    console.log(id);
+    updateID = id;
+    setValues({
+      ...values,
+      customer_name: customer_name,
+      address: address,
+      account_number: account_number,
+      transaction_id: transaction_id,
+      customer_id: customer_id,
+      reason: reason,
+      created_at: created_at,
+      // file_name: file_name,
+    });
+
+    setOpenFileUploadCustomer(true);
+  };
+  const detailClicked = (
+>>>>>>> main
+    id,
+    customer_name,
+    address,
+    account_number,
+    transaction_id,
+    customer_id,
+    reason,
+<<<<<<< HEAD
     file_name
+=======
+    file_name,
+    created_at
+>>>>>>> main
   ) => {
     console.log(id);
     updateID = id;
@@ -194,6 +305,7 @@ const StrList = () => {
       customer_id: customer_id,
       reason: reason,
       file_name: file_name,
+<<<<<<< HEAD
     });
 
     setOpenFileUploadCustomer(true);
@@ -251,6 +363,48 @@ const StrList = () => {
             transaction_id: values.transaction_id,
             reason: values.reason,
             account_number: values.account_number,
+=======
+      created_at: created_at,
+    });
+
+    setOpenDetailCustomer(true);
+  };
+
+  const editStrCustomer = () => {
+    if (values.customer_id.trim() === "") {
+      setErrorMessage2("Please provide Customer ID");
+      return;
+    } else if (values.customer_name.trim() === "") {
+      setErrorMessage2("Please provide Customer Name");
+      return;
+    } else if (values.transaction_id.trim() === "") {
+      setErrorMessage2("Please provide Transaction Id");
+      return;
+    } else if (values.address.trim() === "") {
+      setErrorMessage2("Please provide address");
+      return;
+    } else if (values.account_number.trim() === "") {
+      setErrorMessage2("Account number length must be 16 digit.");
+      return;
+    } else if (values.account_number.length !== 16) {
+      setErrorMessage2("Account number length must be 16 digit.");
+      return;
+    } else if (values.reason.trim() === "") {
+      setErrorMessage2("Please provide reason");
+      return;
+    } else {
+      axios
+        .put(
+          url + "/str/" + updateID,
+          {
+            customer_id: values.customer_id,
+            customer_name: values.customer_name,
+            address: values.address,
+            transaction_id: values.transaction_id,
+
+            account_number: values.account_number,
+            reason: values.reason,
+>>>>>>> main
           },
           { withCredentials: true }
         )
@@ -264,6 +418,7 @@ const StrList = () => {
         })
         .then(
           (data) => {
+<<<<<<< HEAD
             window.location.reload(false);
             /* */
           },
@@ -271,6 +426,30 @@ const StrList = () => {
             alert("Connection to the server failed");
           }
         );
+=======
+            alert("Customer Detail saved");
+            window.location.reload(false);
+          }
+
+          // ,
+          // (error) => {
+          // 	alert("Connection to the server failed");
+          // }
+        )
+        .catch((error) => {
+          if (!error?.response) {
+            setErrorMessage2("No Server Response");
+          } else if (error?.code === AxiosError.ERR_NETWORK) {
+            setErrorMessage2("Network Error");
+          } else if (error.response?.status === 404) {
+            setErrorMessage2("404 - Not Found");
+          } else if (error?.code) {
+            setErrorMessage2("Code: " + error.code);
+          } else {
+            setErrorMessage2("Unknown Error");
+          }
+        });
+>>>>>>> main
     }
     console.log(values.account_number);
     console.log(updateID);
@@ -279,6 +458,7 @@ const StrList = () => {
     event.preventDefault();
     editStrCustomer(); // Save  when form is submitted
   };
+<<<<<<< HEAD
   const columns = [
     {
       name: "Customer Name",
@@ -346,12 +526,230 @@ const StrList = () => {
         ) : (
           ""
         ),
+=======
+  /* 	const saveCustomerFileUpload = () => {
+		// Create a FormData object
+		if (files.length === 0) {
+			setErrorMessage("No file selected. Please choose a file.");
+			return;
+		}
+		const formData = new FormData();
+		const allowedTypes = [
+			"application/pdf",
+			"application/zip",
+			"image/jpeg",
+			"image/png",
+		];
+
+		for (let i = 0; i < files.length; i++) {
+			// formData.append("files", files[i]);
+
+			const file = files[i];
+			if (!allowedTypes.includes(file.type)) {
+				setErrorMessage(
+					"Invalid file type. Please select a PDF, ZIP, JPEG, or PNG file."
+				);
+				return;
+			}
+			formData.append("files", file);
+			console.log("Files ==============>", file);
+		}
+
+		// formData.append("customer_name", values.customer_name);
+		// formData.append("transaction_id", values.transaction_id);
+		// formData.append("customer_id", values.customer_id);
+		// formData.append("reason", values.reason);
+		// formData.append("address", values.address);
+		// formData.append("account_number", values.account_number);
+
+		// if (values.customer_id.trim() === "") {
+		// 	setErrorMessage("Please provide Customer ID");
+		// } else if (values.customer_name.trim() === "") {
+		// 	setErrorMessage("Please provide Customer Name");
+		// } else if (values.transaction_id.trim() === "") {
+		// 	setErrorMessage("Please provide Transaction Id");
+		// } else if (values.reason.trim() === "") {
+		// 	setErrorMessage("Please provide reason");
+		// } else if (values.address.trim() === "") {
+		// 	setErrorMessage("Please provide address");
+		// } else if (values.account_number.trim() === "") {
+		// 	setErrorMessage("Account number length must be 16 digit.");
+		// } else if (values.account_number.length !== 16) {
+		// 	setErrorMessage("Account number length must be 16 digit.");
+		// } else {
+		// axios
+		// 	.post(url + "/str", formData, {
+		// 		withCredentials: true,
+		// 	})
+		// 	.then((res) => {
+		// 		if (res.data.status === "Success") {
+		// 			console.log(res.data);
+		// 			console.log("succeded");
+		// 		} else {
+		// 			console.log("Failed");
+		// 		}
+		// 	})
+		// 	.then(
+		// 		(data) => {
+		// 			alert("Customer Detail saved");
+		// 			window.location.reload(false);
+		// 		}
+		// ,
+		// (error) => {
+		// 	alert("Connection to the server failed");
+		// 	console.log(formData);
+		// }
+		// )
+		// .catch((error) => {
+		// 	if (!error?.response) {
+		// 		setErrorMessage("No Server Response");
+		// 	} else if (error?.code === AxiosError.ERR_NETWORK) {
+		// 		setErrorMessage("Network Error");
+		// 	} else if (error.response?.status === 404) {
+		// 		setErrorMessage("404 - Not Found");
+		// 	} else if (error?.code) {
+		// 		setErrorMessage("Code: " + error.code);
+		// 	} else {
+		// 		setErrorMessage("Unknown Error");
+		// 	}
+		// });
+		// }
+
+		console.log(formData);
+	};
+
+	const handleSubmit = (event) => {
+		event.preventDefault();
+		saveCustomerFileUpload(); // Save  when form is submitted
+	}; */
+  // const date = new Date(row.created_at);
+
+  const columns = [
+    {
+      name: "Customer Name",
+      // selector: "customer_name",
+      selector: (row) => row.customer_name,
+    },
+    {
+      name: "Account Number",
+      selector: (row) => row.account_number,
+    },
+    {
+      name: "Transaction Id",
+      selector: (row) => row.transaction_id,
+    },
+    {
+      name: "ID Number",
+      selector: (row) => row.customer_id,
+    },
+    {
+      name: "created_at",
+      selector: (row) => moment(row.created_at).fromNow(),
+      // moment(timestamp).fromNow()
+      // selector: (row) =>
+      // 	new Date().getHours() -
+      // 	new Date(row.created_at).getHours() +
+      // 	" Hours Ago",
+    },
+
+    {
+      name: "Upload File",
+      cell: (row) => {
+        const createdDate = moment().diff(moment(row.created_at), "hours");
+        // new Date().getHours() - new Date(row.created_at).getHours();
+
+        if (createdDate < 2) {
+          return (
+            <Button
+              color="primary"
+              onClick={() =>
+                clickFileUpload(
+                  row.id,
+                  row.customer_name,
+                  row.address,
+                  row.account_number,
+                  row.transaction_id,
+                  row.customer_id
+                  // row.file_name
+                )
+              }
+            >
+              File Upload
+            </Button>
+          );
+        }
+        return `Upload Mode Disabled`;
+      },
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+    },
+
+    {
+      name: "Edit",
+      cell: (row) => {
+        const createdDate = moment().diff(moment(row.created_at), "hours");
+
+        if (createdDate < 2) {
+          return (
+            <Button
+              color="primary"
+              onClick={() =>
+                editClicked(
+                  row.id,
+                  row.customer_name,
+                  row.address,
+                  row.account_number,
+                  row.transaction_id,
+                  row.customer_id,
+                  row.reason
+                )
+              }
+            >
+              <EditIcon style={{ fill: "#00094B" }} />
+            </Button>
+          );
+        }
+        return "Edit mode Disabled";
+      },
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+    },
+
+    /* 	{
+			name: "Edit",
+			cell: (row) =>
+				row.id != null ? (
+					<Button
+						onClick={() =>
+							editClicked(
+								row.id,
+								row.customer_name,
+								row.address,
+								row.account_number,
+								row.transaction_id,
+								row.customer_id,
+								row.reason
+							)
+						}
+					>
+						<EditIcon style={{ fill: "#00094B" }} />
+					</Button>
+				) : (
+					""
+				),
+>>>>>>> main
 
       ignoreRowClick: true,
       allowOverflow: true,
       button: true,
     },
 
+<<<<<<< HEAD
+=======
+		 */
+>>>>>>> main
     {
       name: "Detail",
 
@@ -384,9 +782,15 @@ const StrList = () => {
     },
   ];
 
+<<<<<<< HEAD
   function handleChanges(newValue) {
     setValues(newValue);
   }
+=======
+  // function handleChanges(newValue) {
+  // 	setValues(newValue);
+  // }
+>>>>>>> main
 
   const searchTriggred = (event) => {
     event.preventDefault();
@@ -501,12 +905,17 @@ const StrList = () => {
             >
               <MuiDialogTitle disableTypography>
                 <Typography variant="h4">
+<<<<<<< HEAD
                   {"ST Customer Detail "} {values.customer_name}
+=======
+                  {"ST Customer Detail "} for {values.customer_name}
+>>>>>>> main
                 </Typography>
               </MuiDialogTitle>
               {/* Detail STR Customer */}
               <DetailStrCustomer values={values} />
               <Box display="flex" justifyContent="flex-end" p={2}>
+<<<<<<< HEAD
                 <Grid>
                   <Button
                     onClick={handleCloseEdit}
@@ -516,6 +925,15 @@ const StrList = () => {
                     Close
                   </Button>
                 </Grid>
+=======
+                <Button
+                  onClick={handleCloseEdit}
+                  variant="outlined"
+                  color="primary"
+                >
+                  Close
+                </Button>
+>>>>>>> main
               </Box>
             </Dialog>
             {/* detail end */}
@@ -574,7 +992,12 @@ const StrList = () => {
               aria-describedby="alert-dialog-slide-description"
             >
               <DialogTitle id="alert-dialog-slide-title">
+<<<<<<< HEAD
                 {"Edit ST Customer Detail "} {values.customer_name}
+=======
+                {"Edit ST Customer Detail "}for {values.customer_name} id is{" "}
+                {updateID}
+>>>>>>> main
               </DialogTitle>
               <DialogContent>
                 <form autoComplete="off" noValidate onSubmit={handleSubmitEdit}>
@@ -668,7 +1091,11 @@ const StrList = () => {
                             onChange={handleChange}
                             aria-label="minimum height"
                             variant="outlined"
+<<<<<<< HEAD
                             value={values.reason ? values.reason.trim : ""}
+=======
+                            value={values.reason}
+>>>>>>> main
                           />
                         </Grid>
                         <Grid item md={6} xs={12}></Grid>
@@ -692,7 +1119,11 @@ const StrList = () => {
                           color="primary"
                           type="submit"
                         >
+<<<<<<< HEAD
                           Create
+=======
+                          Update
+>>>>>>> main
                         </Button>
                       </Grid>
                     </Box>
@@ -713,6 +1144,7 @@ const StrList = () => {
               aria-describedby="alert-dialog-slide-description"
             >
               <DialogTitle id="alert-dialog-slide-title">
+<<<<<<< HEAD
                 {"Suspicious Transaction Customer "} {values.customer_name}
               </DialogTitle>
               <DialogContent>
@@ -721,10 +1153,30 @@ const StrList = () => {
 										{errorMessage2 != "" ? (
 											<div className="error">
 												<Alert severity="warning">{errorMessage2}</Alert>
+=======
+                {"Suspicious Transaction Supported Documents "}
+                {" For "}
+                <Typography variant="h4">{values.customer_name}</Typography>
+              </DialogTitle>
+              <DialogContent>
+                <FileUpload id={updateID} />
+
+                {/* 	<form
+									autoComplete="off"
+									noValidate
+									onSubmit={handleSubmit}
+									enctype="multipart/form-data"
+								>
+									<Card>
+										{errorMessage !== "" ? (
+											<div className="error">
+												<Alert severity="warning">{errorMessage}</Alert>
+>>>>>>> main
 											</div>
 										) : (
 											""
 										)}
+<<<<<<< HEAD
 										<CardHeader />
 										<Divider />
 
@@ -772,6 +1224,70 @@ const StrList = () => {
             </Dialog>
           </Paper>
 
+=======
+										<CardHeader title="Suspicious Transaction File Upload" />
+										<Divider />
+										<CardContent>
+											<Grid container spacing={2} alignItems="center">
+												<Grid item>
+													<input
+														type="file"
+														accept="file/*"
+														multiple
+														name="files"
+														onChange={handleFileChange}
+														id="file-upload"
+													/>
+												</Grid>
+												<Grid item>
+													<Typography variant="body1">
+														{files.length} file(s) selected
+													</Typography>
+												</Grid>
+												<Grid item>
+													{files.length > 0 && (
+														<Typography variant="body1">
+															Selected files:
+															{Array.from(files).map((file, index) => (
+																<>
+																	<p key={file.name}>
+																		{index + 1} . {file.name}
+																		<br />
+																	</p>
+																</>
+															))}
+														</Typography>
+													)}
+												</Grid>
+											</Grid>
+										</CardContent>
+
+										<Divider />
+										<Box display="flex" justifyContent="flex-end" p={2}>
+											<Button color="primary" variant="contained" type="submit">
+												Save details
+											</Button>
+										</Box>
+									</Card>
+								</form> */}
+
+                <Box display="flex" justifyContent="flex-end" p={2}>
+                  <Grid>
+                    <Button
+                      onClick={handleCloseEdit}
+                      variant="outlined"
+                      color="primary"
+                    >
+                      Close
+                    </Button>
+                  </Grid>
+                </Box>
+              </DialogContent>
+              <DialogActions></DialogActions>
+            </Dialog>
+          </Paper>
+
+>>>>>>> main
           <DataTable
             title="Suspicious Transaction List"
             columns={columns}

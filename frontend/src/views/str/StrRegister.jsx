@@ -15,6 +15,8 @@ import {
 } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import { url } from "../../url";
+import { AxiosError } from "axios";
+
 import { CloudUpload as CloudUploadIcon } from "@material-ui/icons";
 
 const StrRegister = (props) => {
@@ -37,11 +39,34 @@ const StrRegister = (props) => {
 	const saveCustomer = () => {
 		// Create a FormData object
 
+		// uploading file is optional
+		// if (files.length === 0) {
+		// 	setErrorMessage("No file selected. Please choose a file.");
+		// 	return;
+		// }
+
 		const formData = new FormData();
+		const allowedTypes = [
+			"application/pdf",
+			"application/zip",
+			"image/jpeg",
+			"image/png",
+		];
 
 		for (let i = 0; i < files.length; i++) {
-			formData.append("files", files[i]);
+			// formData.append("files", files[i]);
+
+			const file = files[i];
+			if (!allowedTypes.includes(file.type)) {
+				setErrorMessage(
+					"Invalid file type. Please select a PDF, ZIP, JPEG, or PNG file."
+				);
+				return;
+			}
+			formData.append("files", file);
+			console.log("Files ==============>", file);
 		}
+
 		formData.append("customer_name", values.customer_name);
 		formData.append("transaction_id", values.transaction_id);
 		formData.append("customer_id", values.customer_id);
@@ -78,14 +103,28 @@ const StrRegister = (props) => {
 				})
 				.then(
 					(data) => {
+						alert("Customer Detail saved");
 						window.location.reload(false);
-					},
-					(error) => {
-						alert("Connection to the server failed");
-						console.log(formData);
 					}
+					// ,
+					// (error) => {
+					// 	alert("Connection to the server failed");
+					// 	console.log(formData);
+					// }
 				)
-				.catch((err) => console.error(err));
+				.catch((error) => {
+					if (!error?.response) {
+						setErrorMessage("No Server Response");
+					} else if (error?.code === AxiosError.ERR_NETWORK) {
+						setErrorMessage("Network Error");
+					} else if (error.response?.status === 404) {
+						setErrorMessage("404 - Not Found");
+					} else if (error?.code) {
+						setErrorMessage("Code: " + error.code);
+					} else {
+						setErrorMessage("Unknown Error");
+					}
+				});
 		}
 
 		console.log(formData);
