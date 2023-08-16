@@ -349,7 +349,7 @@ const StrList = () => {
 				const createdDate = moment().diff(moment(row.created_at), "hours");
 				// new Date().getHours() - new Date(row.created_at).getHours();
 
-				if (createdDate < 20) {
+				if (createdDate < 2) {
 					return (
 						<Button
 							color="primary"
@@ -381,7 +381,7 @@ const StrList = () => {
 			cell: (row) => {
 				const createdDate = moment().diff(moment(row.created_at), "hours");
 
-				if (createdDate < 20) {
+				if (createdDate < 2) {
 					return (
 						<Button
 							color="primary"
