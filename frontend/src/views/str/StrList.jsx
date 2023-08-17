@@ -340,10 +340,14 @@ const StrList = () => {
 		},
 		{
 			name: "created_at",
-			selector: (row) => moment(row.created_at).fromNow(),
+			selector: (row) => {
+				if (row.id != null) {
+					moment(row.created_at).fromNow();
+				}
+			},
 		},
 
-		{
+		/* 	{
 			name: "Upload File",
 			cell: (row) => {
 				const createdDate = moment().diff(moment(row.created_at), "hours");
@@ -374,69 +378,77 @@ const StrList = () => {
 			ignoreRowClick: true,
 			allowOverflow: true,
 			button: true,
-		},
+		}, */
 
+		{
+			name: "Upload File",
+			cell: (row) => {
+				const createdDate = moment().diff(moment(row.created_at), "hours");
+
+				if (row.id != null) {
+					if (createdDate < 2) {
+						return (
+							<Button
+								color="primary"
+								onClick={() =>
+									clickFileUpload(
+										row.id,
+										row.customer_name,
+										row.address,
+										row.account_number,
+										row.transaction_id,
+										row.customer_id
+										// row.file_name
+									)
+								}
+							>
+								File Upload
+							</Button>
+						);
+					} else {
+						return `Upload Mode Disabled`;
+					}
+				}
+			},
+			ignoreRowClick: true,
+			allowOverflow: true,
+			button: true,
+		},
 		{
 			name: "Edit",
 			cell: (row) => {
 				const createdDate = moment().diff(moment(row.created_at), "hours");
 
-				if (createdDate < 2) {
-					return (
-						<Button
-							color="primary"
-							onClick={() =>
-								editClicked(
-									row.id,
-									row.customer_name,
-									row.address,
-									row.account_number,
-									row.transaction_id,
-									row.customer_id,
-									row.reason
-								)
-							}
-						>
-							<EditIcon style={{ fill: "#00094B" }} />
-						</Button>
-					);
+				if (row.id != null) {
+					if (createdDate < 2) {
+						return (
+							<Button
+								color="primary"
+								onClick={() =>
+									editClicked(
+										row.id,
+										row.customer_name,
+										row.address,
+										row.account_number,
+										row.transaction_id,
+										row.customer_id,
+										row.reason
+									)
+								}
+							>
+								<EditIcon style={{ fill: "#00094B" }} />
+							</Button>
+						);
+					} else {
+						return "Edit mode Disabled";
+					}
 				}
-				return "Edit mode Disabled";
 			},
 			ignoreRowClick: true,
 			allowOverflow: true,
 			button: true,
 		},
 
-		/* 	{
-			name: "Edit",
-			cell: (row) =>
-				row.id != null ? (
-					<Button
-						onClick={() =>
-							editClicked(
-								row.id,
-								row.customer_name,
-								row.address,
-								row.account_number,
-								row.transaction_id,
-								row.customer_id,
-								row.reason
-							)
-						}
-					>
-						<EditIcon style={{ fill: "#00094B" }} />
-					</Button>
-				) : (
-					""
-				),
-
-			ignoreRowClick: true,
-			allowOverflow: true,
-			button: true,
-		},
-
-		 */
 		{
 			name: "Detail",
 

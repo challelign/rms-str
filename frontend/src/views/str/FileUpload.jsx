@@ -114,7 +114,7 @@ const FileUpload = ({ id, values }) => {
 				) : (
 					""
 				)}
-				<CardHeader title="Suspicious Transaction registration (Upload ZIP File only) " />
+				<CardHeader title="Supported Documents like Opening Form, Copy of ID , Trade License , TIN and more (Upload ZIP file only) " />
 				<Divider />
 				<CardContent>
 					{/* <p>{id}</p> */}
