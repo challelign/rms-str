@@ -231,6 +231,7 @@ const StrRegister = (props) => {
 						</Grid>
 						<Grid item md={6} xs={12}></Grid>
 					</Grid>
+					<CardHeader title="Supported Documents like Opening Form, Copy of ID , Trade License , TIN and more (ZIP file only) " />
 					<Grid container spacing={2} alignItems="center">
 						<Grid item>
 							<input
