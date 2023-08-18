@@ -23,6 +23,7 @@ const StrRegister = (props) => {
 	const [redirect, setRedirect] = useState(false);
 	const [errorMessage, setErrorMessage] = useState("");
 	const [files, setFiles] = useState([]);
+	const [isSaving, setIsSaving] = useState(false);
 
 	const [values, setValues] = useState({
 		customer_name: "",
@@ -83,6 +84,8 @@ const StrRegister = (props) => {
 		} else if (values.account_number.length !== 16) {
 			setErrorMessage("Account number length must be 16 digit.");
 		} else {
+			setIsSaving(true);
+
 			axios
 				.post(url + "/str", formData, {
 					withCredentials: true,
@@ -118,6 +121,9 @@ const StrRegister = (props) => {
 					} else {
 						setErrorMessage("Unknown Error");
 					}
+				})
+				.finally(() => {
+					setIsSaving(false); // Set isSaving back to false to enable the submit button
 				});
 		}
 
@@ -251,15 +257,15 @@ const StrRegister = (props) => {
 									component="span"
 									startIcon={<CloudUploadIcon />}
 								>
-									Upload Files
+									Upload File
 								</Button>
 							</label>
 						</Grid>
-						<Grid item>
+						{/* <Grid item>
 							<Typography variant="body1">
-								{files.length} file(s) selected
+								{files.length} file selected
 							</Typography>
-						</Grid>
+						</Grid> */}
 						<Grid item>
 							{files.length > 0 && (
 								<Typography variant="body1">
@@ -284,7 +290,7 @@ const StrRegister = (props) => {
 				<Divider />
 				<Box display="flex" justifyContent="flex-end" p={2}>
 					<Button color="primary" variant="contained" type="submit">
-						Save details
+						{isSaving ? "Saving..." : "Save details"}
 					</Button>
 				</Box>
 			</Card>

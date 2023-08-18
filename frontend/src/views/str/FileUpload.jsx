@@ -19,6 +19,7 @@ import { AxiosError } from "axios";
 const FileUpload = ({ id, values }) => {
 	const [errorMessage, setErrorMessage] = useState("");
 	const [files, setFiles] = useState([]);
+	const [isSaving, setIsSaving] = useState(false);
 
 	const handleFileChange = (e) => {
 		setFiles(e.target.files);
@@ -55,6 +56,8 @@ const FileUpload = ({ id, values }) => {
 			setErrorMessage("No file selected. Please choose a file.");
 			return;
 		} else {
+			setIsSaving(true);
+
 			try {
 				// alert(id);
 				axios
@@ -85,6 +88,9 @@ const FileUpload = ({ id, values }) => {
 						} else {
 							setErrorMessage("Unknown Error");
 						}
+					})
+					.finally(() => {
+						setIsSaving(false); // Set isSaving back to false to enable the submit button
 					});
 			} catch (error) {
 				console.error(error.message);
@@ -130,15 +136,15 @@ const FileUpload = ({ id, values }) => {
 								id="file-upload"
 							/>
 						</Grid>
-						<Grid item key={id}>
+						{/* <Grid item key={id}>
 							<Typography variant="body1">
 								{files.length} file(s) selected
 							</Typography>
-						</Grid>
+						</Grid> */}
 
 						{files.length > 0 && (
 							<Typography variant="body1">
-								Selected files:
+								Selected file:
 								{/* {Array.from(files)
 										.map((file) => file.name)
 										.join(", ")} */}
@@ -157,8 +163,12 @@ const FileUpload = ({ id, values }) => {
 
 				<Divider />
 				<Box display="flex" justifyContent="flex-end" p={2}>
+					{/* <button type="submit" disabled={isSaving}>
+						{isSaving ? "Saving..." : "Submit"}
+					</button> */}
 					<Button color="primary" variant="contained" type="submit">
-						Save details
+						{/* Upload File */}
+						{isSaving ? "Saving..." : "Upload File"}
 					</Button>
 				</Box>
 			</Card>

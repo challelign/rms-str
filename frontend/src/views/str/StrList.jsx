@@ -340,11 +340,7 @@ const StrList = () => {
 		},
 		{
 			name: "created_at",
-			selector: (row) => {
-				if (row.id != null) {
-					moment(row.created_at).fromNow();
-				}
-			},
+			selector: (row) => moment(row.created_at).fromNow(),
 		},
 
 		/* 	{
