@@ -170,7 +170,7 @@ prominentCustomerLoan.getAll = (
 };
 prominentCustomerLoan.remove = (id, result) => {
 	const sql = `DELETE FROM ${tableName} WHERE id = ?  `;
-	db.query(sql, id, branch_code, (err, res) => {
+	db.query(sql, id, (err, res) => {
 		if (err) {
 			result(null, err);
 			return;

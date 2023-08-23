@@ -42,6 +42,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import Alert from "@material-ui/lab/Alert";
 import RegistrationProminentCustomer from "./RegistrationProminentCustomer";
 import Autocomplete from "@material-ui/lab/Autocomplete/Autocomplete";
+import { AxiosError } from "axios";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
@@ -318,18 +319,32 @@ const ProminentCustomer = ({}) => {
 			})
 			.then(
 				(res) => {
+					// alert("Customer Detail Deleted");
 					window.location.reload(false);
 					alert(res.data.message);
 					/* */
-				},
-				(error) => {
-					axios.post(BatchUrl, {}).then((login) => {
-						/* */
-					});
-
-					alert("Connection to the server failed , please try again :)");
 				}
-			);
+				// (error) => {
+				// 	axios.post(BatchUrl, {}).then((login) => {
+				// 		/* */
+				// 	});
+
+				// 	alert("Connection to the server failed , please try again :)");
+				// }
+			)
+			.catch((error) => {
+				if (!error?.response) {
+					setErrorMessage2("No Server Response");
+				} else if (error?.code === AxiosError.ERR_NETWORK) {
+					setErrorMessage2("Network Error");
+				} else if (error.response?.status === 404) {
+					setErrorMessage2("404 - Not Found");
+				} else if (error?.code) {
+					setErrorMessage2("Code: " + error.code);
+				} else {
+					setErrorMessage2("Unknown Error");
+				}
+			});
 	};
 
 	const getOrganizationList = () => {
@@ -557,6 +572,13 @@ const ProminentCustomer = ({}) => {
 						<DialogContent>
 							<DialogContentText id="alert-dialog-slide-description">
 								Are you sure you want to delete customer {organization_nam}
+								{errorMessage2 !== "" ? (
+									<div className="error">
+										<Alert severity="warning">{errorMessage2}</Alert>
+									</div>
+								) : (
+									""
+								)}
 							</DialogContentText>
 						</DialogContent>
 						<DialogActions>
