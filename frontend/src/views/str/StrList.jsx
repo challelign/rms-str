@@ -15,6 +15,8 @@ import {
 	TextField,
 	Typography,
 } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
+
 import EditIcon from "@material-ui/icons/Edit";
 import { AxiosError } from "axios";
 
@@ -45,6 +47,8 @@ import { url } from "../../url";
 import StrRegister from "./StrRegister";
 import Alert from "@material-ui/lab/Alert/Alert";
 import DetailStrCustomer from "./DetailStrCustomer";
+import reasonOfSuspicious from "../constants/reasonOfSuspicious ";
+// import typeofAccount from "../constants/typeofAccount";
 window.$updateId = 0;
 window.$customer_name = "Test Name";
 window.$isLogged = 0;
@@ -64,7 +68,7 @@ var fcyCustomerName = "";
 var branch_message = "";
 var deleteID;
 var deleteCustomerPaymentId;
-var organization_nam = "";
+var account_holder_name;
 var updateID;
 var report = "";
 var prevSearchInput = "";
@@ -100,6 +104,7 @@ const StrList = () => {
 		customer_id: "",
 		reason: "",
 		file_name: "",
+		// typeofAccount: "",
 		created_at: "",
 	});
 
@@ -114,6 +119,7 @@ const StrList = () => {
 	const [dataFetched, setDataFetched] = useState(false);
 	const [openEditCustomer, setOpenEditCustomer] = useState(false);
 	const [openFileUploadCustomer, setOpenFileUploadCustomer] = useState(false);
+	const [isUpdating, setIsUpdating] = useState(false);
 
 	const [openDetailCustomer, setOpenDetailCustomer] = useState(false);
 	const [openEdit, setOpenEdit] = React.useState(false);
@@ -167,6 +173,8 @@ const StrList = () => {
 		transaction_id,
 		customer_id,
 		reason,
+		// typeofAccount,
+
 		created_at
 		// file_name
 	) => {
@@ -180,6 +188,7 @@ const StrList = () => {
 			transaction_id: transaction_id,
 			customer_id: customer_id,
 			reason: reason,
+			// typeofAccount: typeofAccount,
 			created_at: created_at,
 			// file_name: file_name,
 		});
@@ -222,6 +231,8 @@ const StrList = () => {
 		transaction_id,
 		customer_id,
 		reason,
+		// typeofAccount,
+
 		file_name,
 		created_at
 	) => {
@@ -235,6 +246,8 @@ const StrList = () => {
 			transaction_id: transaction_id,
 			customer_id: customer_id,
 			reason: reason,
+			// typeofAccount: typeofAccount,
+
 			file_name: file_name,
 			created_at: created_at,
 		});
@@ -242,17 +255,35 @@ const StrList = () => {
 		setOpenDetailCustomer(true);
 	};
 
+	const deleteClicked = (id, customer_name) => {
+		console.log(id);
+		deleteID = id;
+		setValues({
+			...values,
+			customer_name: customer_name,
+		});
+
+		setdeleteConfirmOpen(true);
+	};
+
 	const editStrCustomer = () => {
 		if (values.customer_id.trim() === "") {
 			setErrorMessage2("Please provide Customer ID");
 			return;
 		} else if (values.customer_name.trim() === "") {
-			setErrorMessage2("Please provide Customer Name");
+			setErrorMessage2("Please provide Account  Holder Name");
 			return;
 		} else if (values.transaction_id.trim() === "") {
+			/* else if (values.typeofAccount.trim() === "-1") {
+			setErrorMessage2("Please  Select Account type");
+			return;
+		}  */
 			setErrorMessage2("Please provide Transaction Id");
 			return;
 		} else if (values.address.trim() === "") {
+			/*  else if (values.typeofAccount.trim() === "") {
+			setErrorMessage2("Please Select Account type");
+		} */
 			setErrorMessage2("Please provide address");
 			return;
 		} else if (values.account_number.trim() === "") {
@@ -261,10 +292,14 @@ const StrList = () => {
 		} else if (values.account_number.length !== 16) {
 			setErrorMessage2("Account number length must be 16 digit.");
 			return;
+		} else if (values.reason.trim() === "-1") {
+			setErrorMessage2("Please  Select reason");
+			return;
 		} else if (values.reason.trim() === "") {
 			setErrorMessage2("Please provide reason");
 			return;
 		} else {
+			setIsUpdating(true);
 			axios
 				.put(
 					url + "/str/" + updateID,
@@ -276,6 +311,7 @@ const StrList = () => {
 
 						account_number: values.account_number,
 						reason: values.reason,
+						// typeofAccount: values.typeofAccount,
 					},
 					{ withCredentials: true }
 				)
@@ -310,6 +346,9 @@ const StrList = () => {
 					} else {
 						setErrorMessage2("Unknown Error");
 					}
+				})
+				.finally(() => {
+					setIsUpdating(false); // Set setIsUpdating back to false to enable the submit button
 				});
 		}
 		console.log(values.account_number);
@@ -322,7 +361,7 @@ const StrList = () => {
 
 	const columns = [
 		{
-			name: "Customer Name",
+			name: "Account  Holder Name",
 			// selector: "customer_name",
 			selector: (row) => row.customer_name,
 		},
@@ -339,10 +378,41 @@ const StrList = () => {
 			selector: (row) => row.customer_id,
 		},
 		{
-			name: "created_at",
-			selector: (row) => moment(row.created_at).fromNow(),
+			name: "Created Date",
+			selector: (row) =>
+				row.id != null ? moment(row.created_at).format("MMM Do YY") : "",
 		},
 
+		{
+			name: "Detail",
+			cell: (row) =>
+				row.id != null ? (
+					<Button
+						color="primary"
+						onClick={() =>
+							detailClicked(
+								row.id,
+								row.customer_name,
+								row.address,
+								row.account_number,
+								row.transaction_id,
+
+								row.customer_id,
+								row.reason,
+								// row.typeofAccount,
+								row.file_name
+							)
+						}
+					>
+						View
+					</Button>
+				) : (
+					""
+				),
+			ignoreRowClick: true,
+			allowOverflow: true,
+			button: true,
+		},
 		/* 	{
 			name: "Upload File",
 			cell: (row) => {
@@ -402,7 +472,7 @@ const StrList = () => {
 							</Button>
 						);
 					} else {
-						return `Upload Mode Disabled`;
+						return `Disabled`;
 					}
 				}
 			},
@@ -429,6 +499,7 @@ const StrList = () => {
 										row.transaction_id,
 										row.customer_id,
 										row.reason
+										// row.typeofAccount
 									)
 								}
 							>
@@ -436,7 +507,7 @@ const StrList = () => {
 							</Button>
 						);
 					} else {
-						return "Edit mode Disabled";
+						return "Disabled";
 					}
 				}
 			},
@@ -446,31 +517,22 @@ const StrList = () => {
 		},
 
 		{
-			name: "Detail",
+			name: "Delete",
+			cell: (row) => {
+				const createdDate = moment().diff(moment(row.created_at), "hours");
 
-			cell: (row) =>
-				row.id != null ? (
-					<Button
-						color="primary"
-						onClick={() =>
-							detailClicked(
-								row.id,
-								row.customer_name,
-								row.address,
-								row.account_number,
-								row.transaction_id,
-
-								row.customer_id,
-								row.reason,
-								row.file_name
-							)
-						}
-					>
-						View
-					</Button>
-				) : (
-					""
-				),
+				if (row.id != null) {
+					if (createdDate < 2) {
+						return (
+							<Button onClick={() => deleteClicked(row.id, row.customer_name)}>
+								<DeleteIcon style={{ fill: "#00094B" }} />
+							</Button>
+						);
+					} else {
+						return "Disabled";
+					}
+				}
+			},
 			ignoreRowClick: true,
 			allowOverflow: true,
 			button: true,
@@ -516,6 +578,33 @@ const StrList = () => {
 
 		console.log(id + " " + transaction_id);
 	};
+
+	const deleteSTRCustomer = () => {
+		console.log("delete called");
+		axios
+			.delete(url + "/str/" + deleteID, {
+				withCredentials: true,
+			})
+			.then((res) => {
+				// alert("Customer Detail Deleted");
+				window.location.reload(false);
+				alert(res.data.message);
+			})
+			.catch((error) => {
+				if (!error?.response) {
+					setErrorMessage2("No Server Response");
+				} else if (error?.code === AxiosError.ERR_NETWORK) {
+					setErrorMessage2("Network Error");
+				} else if (error.response?.status === 404) {
+					setErrorMessage2("404 - Not Found");
+				} else if (error?.code) {
+					setErrorMessage2("Code: " + error.code);
+				} else {
+					setErrorMessage2("Unknown Error");
+				}
+			});
+	};
+
 	const getStrList = () => {
 		setDataFetched(false);
 		axios
@@ -575,7 +664,7 @@ const StrList = () => {
 							color="primary"
 							onClick={() => createSTRUser()}
 						>
-							<PersonAddIcon /> Register STR User
+							<PersonAddIcon /> Register New STR
 						</Button>
 						{/* detail start */}
 						<Dialog
@@ -606,6 +695,41 @@ const StrList = () => {
 							</Box>
 						</Dialog>
 						{/* detail end */}
+
+						<Dialog
+							open={deleteConfirmOpen}
+							TransitionComponent={Transition}
+							keepMounted
+							onClose={handleClose}
+							aria-labelledby="alert-dialog-slide-title"
+							aria-describedby="alert-dialog-slide-description"
+						>
+							<DialogTitle id="alert-dialog-slide-title">
+								{"Delete Account Holder :"}
+								{/* {updateID} */}
+								{values.customer_name}
+							</DialogTitle>
+							<DialogContent>
+								<DialogContentText id="alert-dialog-slide-description">
+									Are you sure you want to delete Account Holder
+									{errorMessage2 !== "" ? (
+										<div className="error">
+											<Alert severity="warning">{errorMessage2}</Alert>
+										</div>
+									) : (
+										""
+									)}
+								</DialogContentText>
+							</DialogContent>
+							<DialogActions>
+								<Button onClick={handleClose} color="primary">
+									No cancel
+								</Button>
+								<Button onClick={deleteSTRCustomer} color="primary">
+									Delete
+								</Button>
+							</DialogActions>
+						</Dialog>
 
 						<Dialog
 							open={openCreate}
@@ -644,17 +768,10 @@ const StrList = () => {
 							<DialogContent>
 								<form autoComplete="off" noValidate onSubmit={handleSubmitEdit}>
 									<Card>
-										{errorMessage2 != "" ? (
-											<div className="error">
-												<Alert severity="warning">{errorMessage2}</Alert>
-											</div>
-										) : (
-											""
-										)}
 										<CardHeader />
 										<Divider />
 
-										<CardHeader title="Suspicious Transaction registration" />
+										<CardHeader title="Suspicious Transaction Update" />
 										<Divider />
 										<CardContent>
 											<Grid container spacing={3}>
@@ -698,6 +815,36 @@ const StrList = () => {
 													<p>Account Length Should be 16 Long </p>
 													<p>Current Length {values.account_number.length}</p>
 												</Grid>
+
+												{/* <Grid item md={6} xs={12}>
+													<TextField
+														fullWidth
+														label="Account Type"
+														name="typeofAccount"
+														onChange={handleChange}
+														required
+														select
+														error={
+															values.actions == -1
+																? values.inputError
+																	? true
+																	: false
+																: ""
+														}
+														SelectProps={{ native: true }}
+														variant="outlined"
+													>
+														{typeofAccount.map((option) => (
+															<option
+																key={option.value}
+																value={option.value}
+																selected={values.typeofAccount === option.value}
+															>
+																{option.label}
+															</option>
+														))}
+													</TextField>
+												</Grid> */}
 												<Grid item md={6} xs={12}>
 													<TextField
 														fullWidth
@@ -722,7 +869,7 @@ const StrList = () => {
 														value={values.transaction_id}
 													/>
 												</Grid>
-												<Grid item md={6} xs={12}>
+												{/* <Grid item md={6} xs={12}>
 													<TextField
 														multiline
 														rows={4}
@@ -735,11 +882,48 @@ const StrList = () => {
 														variant="outlined"
 														value={values.reason}
 													/>
+												</Grid> */}
+
+												<Grid item md={6} xs={12}>
+													<TextField
+														fullWidth
+														label="Reason Of Suspicious"
+														name="reason"
+														onChange={handleChange}
+														required
+														select
+														// error={
+														// 	values.actions === -1
+														// 		? values.inputError
+														// 			? true
+														// 			: false
+														// 		: ""
+														// }
+														SelectProps={{ native: true }}
+														// value={values.customerAction}
+														variant="outlined"
+													>
+														{reasonOfSuspicious.map((option) => (
+															<option
+																key={option.value}
+																value={option.value}
+																selected={values.reason == option.value}
+															>
+																{option.label}
+															</option>
+														))}
+													</TextField>
 												</Grid>
-												<Grid item md={6} xs={12}></Grid>
 											</Grid>
 										</CardContent>
 										<Divider />
+										{errorMessage2 != "" ? (
+											<div className="error">
+												<Alert severity="warning">{errorMessage2}</Alert>
+											</div>
+										) : (
+											""
+										)}
 										<Box display="flex" justifyContent="flex-end" p={2}>
 											<Grid>
 												{" "}
@@ -756,8 +940,9 @@ const StrList = () => {
 													variant="outlined"
 													color="primary"
 													type="submit"
+													disabled={isUpdating}
 												>
-													Update
+													{isUpdating ? "Updating ..." : "Update"}
 												</Button>
 											</Grid>
 										</Box>

@@ -67,6 +67,8 @@ const LoginView = () => {
 						if (login.data.success) {
 							localStorage.setItem("branch", login.data.branch);
 							localStorage.setItem("position", login.data.position);
+							localStorage.setItem("first_name", login.data.first_name);
+
 							if (login.data.BOResourceLogged) {
 								setBOResourceLogged(true);
 							} else if (login.data.IBDLogged) {
@@ -103,6 +105,7 @@ const LoginView = () => {
 					// console.log(authorized.data.authorized);
 					localStorage.setItem("branch", authorized.data.branch);
 					localStorage.setItem("position", authorized.data.position);
+					localStorage.setItem("first_name", authorized.data.first_name);
 					if (authorized.data.BOResourceLogged) {
 						setBOResourceLogged(true);
 					} else {
@@ -163,7 +166,7 @@ const LoginView = () => {
 						{({
 							errors,
 							handleBlur,
-							handleChange,
+							// handleChange,
 							handleSubmit,
 							isSubmitting,
 							touched,
@@ -202,7 +205,7 @@ const LoginView = () => {
 									label="Username"
 									margin="normal"
 									onBlur={handleBlur}
-									onChange={handleChange}
+									// onChange={handleChange}
 									type="text"
 									id="name"
 									onChange={(e) =>
@@ -219,7 +222,7 @@ const LoginView = () => {
 									margin="normal"
 									name="password"
 									onBlur={handleBlur}
-									onChange={handleChange}
+									// onChange={handleChange}
 									type="password"
 									id="password"
 									onChange={(e) =>
@@ -236,7 +239,6 @@ const LoginView = () => {
 										fullWidth
 										size="medium"
 										type="submit"
-										color="primary"
 									>
 										Sign in now
 									</Button>

@@ -250,17 +250,40 @@ const ProminentCustomer = ({}) => {
 					},
 					{ withCredentials: true }
 				)
+
 				.then(
-					(data) => {
-						// alert(window.location);
-						window.location.reload(true);
-						// <Navigate to="/rms2/app/prominent_customer_loan" />;
+					(res) => {
+						// alert("Customer Detail Deleted");
+						window.location.reload(false);
+						alert(res.data.message);
+						// setErrorMessage(res.data.message);
 						/* */
-					},
-					(error) => {
-						alert("Connection to the server failed");
 					}
-				);
+					// (error) => {
+					// 	axios.post(BatchUrl, {}).then((login) => {
+					// 		/* */
+					// 	});
+
+					// 	alert("Connection to the server failed , please try again :)");
+					// }
+				)
+				.catch((error) => {
+					if (!error?.response) {
+						setErrorMessage2("No Server Response");
+					} else if (error?.code === AxiosError.ERR_NETWORK) {
+						setErrorMessage2("Network Error");
+					} else if (error.response?.status === 404) {
+						setErrorMessage2("404 - Not Found");
+					}
+					// i custom 400 error code to the backend
+					else if (error.response?.status === 400) {
+						setErrorMessage2("Account number already exists");
+					} else if (error?.code) {
+						setErrorMessage2("Code: " + error.code);
+					} else {
+						setErrorMessage2("Unknown Error");
+					}
+				});
 		}
 		console.log("company_name, ", company_name.company_name);
 		console.log("company_id, ", company_name.id);

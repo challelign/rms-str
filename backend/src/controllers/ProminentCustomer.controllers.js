@@ -1,7 +1,7 @@
 // const FcyCustomer = require("../models/fcyCustomer.model");
 const ProminentCustomer = require("../models/prominentCustomerLoan.model");
 
-exports.create = (req, res) => {
+/* exports.create = (req, res) => {
 	// validate request
 	if (!req.body) res.status(400).send({ message: "Content can not be empty!" });
 
@@ -31,6 +31,57 @@ exports.create = (req, res) => {
 		else res.send({ message: "Customer was created successfully!", data });
 		//}
 	});
+};
+ */
+
+exports.create = (req, res) => {
+	// validate request
+	if (!req.body) {
+		res.status(400).send({ message: "Content can not be empty!" });
+		return;
+	}
+
+	// create new customer
+	const prominentCustomer = new ProminentCustomer({
+		user_id: req.session.user_id,
+		branch_code: req.session.branch_code,
+		branch: req.session.branch,
+		account_number: req.body.account_number,
+		company_name: req.body.company_name,
+	});
+
+	// check if account number already exists
+	ProminentCustomer.checkAccountNumberExists(
+		prominentCustomer.account_number,
+		(err, accountExists) => {
+			if (err) {
+				res.status(500).send({
+					message:
+						err.message || "Some error occurred while creating the customer.",
+				});
+				return;
+			}
+			if (accountExists) {
+				res.status(400).send({
+					message: "Account number already exists",
+				});
+				console.log("Account number already exists");
+				return;
+			}
+
+			// save customer in the database
+			ProminentCustomer.create(prominentCustomer, (err, data) => {
+				if (err) {
+					res.status(500).send({
+						message:
+							err.message || "Some error occurred while creating the customer.",
+					});
+				} else {
+					res.send({ message: "Customer was created successfully!", data });
+				}
+			});
+		}
+	);
 };
 exports.findAll = (req, res) => {
 	if (req.session.autenticated) {
@@ -120,36 +171,66 @@ exports.delete = (req, res) => {
 	// else{ res.send({ message: "unauthorized access!" });}
 };
 exports.updateCustomer = (req, res) => {
+	// check if account number already exists
+
 	if (req.session.autenticated) {
-		console.log("called");
-		// validate request
-
-		console.log("req.body data is from the backend", req.body);
-		if (!req.body)
-			res.status(400).send({ message: "Content can not be empty!" });
-
 		const { customerId } = req.params;
 		const data = new ProminentCustomer(req.body);
 		console.log(data);
-		//LoggedUser.update_action(0,0,0,0,1,req.session.user_id, (err, data) => {  });
-		ProminentCustomer.updateById(
+
+		console.log("req.body data is from the backend", req.body);
+
+		ProminentCustomer.checkAccountNumberExistsUpdate(
 			customerId,
-			data,
-			req.session.user_id,
-			req.session.branch_code,
-			req.session.branch,
-			(err, data) => {
+			req.body.account_number,
+			(err, accountExists) => {
 				if (err) {
-					// eslint-disable-next-line no-unused-expressions
-					err.result === "not_found"
-						? res
-								.status(404)
-								.send({ message: `Not found customer with id ${customerId}` })
-						: res.status(500).send({
-								message: `Could not update customer with id ${customerId}`,
-						  });
-				} else
-					res.send({ message: "Customer data updated successfully!", data });
+					res.status(500).send({
+						message:
+							err.message || "Some error occurred while creating the customer.",
+					});
+					return;
+				}
+				if (accountExists) {
+					res.status(400).send({
+						message: "Account number already exists",
+					});
+					console.log("Account number already exists");
+					return;
+				}
+
+				// update code here
+
+				console.log("called");
+				// validate request
+
+				if (!req.body)
+					res.status(400).send({ message: "Content can not be empty!" });
+
+				//LoggedUser.update_action(0,0,0,0,1,req.session.user_id, (err, data) => {  });
+				ProminentCustomer.updateById(
+					customerId,
+					data,
+					req.session.user_id,
+					req.session.branch_code,
+					req.session.branch,
+					(err, data) => {
+						if (err) {
+							// eslint-disable-next-line no-unused-expressions
+							err.result === "not_found"
+								? res.status(404).send({
+										message: `Not found customer with id ${customerId}`,
+								  })
+								: res.status(500).send({
+										message: `Could not update customer with id ${customerId}`,
+								  });
+						} else
+							res.send({
+								message: "Customer data updated successfully!",
+								data,
+							});
+					}
+				);
 			}
 		);
 	} else {
