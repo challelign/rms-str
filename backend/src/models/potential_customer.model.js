@@ -5,9 +5,13 @@ const tableName = "potential_customers";
 // constructor
 
 function PotentialCustomer(potential_customer) {
+	this.user_id = potential_customer.user_id;
+	this.branch_code = potential_customer.branch_code;
+	this.branch = potential_customer.branch;
 	this.company_name = potential_customer.company_name;
 	this.contact_person = potential_customer.contact_person;
 	this.organization_type = potential_customer.organization_type;
+	this.isProminent = potential_customer.isProminent;
 	this.phone = potential_customer.phone;
 	this.address = potential_customer.address;
 
@@ -144,7 +148,8 @@ PotentialCustomer.getAll = (page, countPerPage, BOResourceLoggedIn, result) => {
 
 PotentialCustomer.getDistinct = (result) => {
 	// const pageCount = page * countPerPage;
-	const sql = `SELECT DISTINCT id, company_name FROM ${tableName}  where action = 3`;
+	const sql = `SELECT DISTINCT id, company_name FROM ${tableName}  where action = ? AND isProminent = ?`;
+	const values = [3, 1];
 	// var count = `SELECT COUNT(*) AS totalCount FROM ${tableName} WHERE customer_branch = ?`;
 	var count = `SELECT COUNT(DISTINCT company_name) AS unique_company_names_count FROM ${tableName}`;
 	console.log(sql);
@@ -154,7 +159,7 @@ PotentialCustomer.getDistinct = (result) => {
 			return;
 		}
 
-		db.query(sql, (err, res) => {
+		db.query(sql, values, (err, res) => {
 			if (err) {
 				result(null, err);
 				return;
@@ -186,13 +191,14 @@ PotentialCustomer.remove = (id, result) => {
 	});
 };
 PotentialCustomer.updateById = (id, data, user_id, result) => {
-	const sql = `UPDATE ${tableName} SET company_name = ?, 	organization_type = ?, contact_person = ?, phone = ?, address = ? WHERE id = ?`;
+	const sql = `UPDATE ${tableName} SET company_name = ?, 	organization_type = ?,isProminent= ?, contact_person = ?, phone = ?, address = ? WHERE id = ?`;
 	console.log(data);
 	db.query(
 		sql,
 		[
 			data.company_name,
 			data.organization_type,
+			data.isProminent,
 			data.contact_person,
 			data.phone,
 			data.address,

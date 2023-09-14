@@ -7,4 +7,5 @@ module.exports = (app) => {
 	app.post("/str", str.create);
 	app.put("/str/:id", str.updateCustomer);
 	app.put("/str/upload/:id", str.updateFile);
+	app.delete("/str/:accountHolderId", str.delete);
 };

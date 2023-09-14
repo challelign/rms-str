@@ -34,6 +34,7 @@ exports.create = (req, res) => {
 			account_number: req.body.account_number,
 			transaction_id: req.body.transaction_id,
 			reason: req.body.reason,
+			// typeofAccount: req.body.typeofAccount,
 			address: req.body.address,
 			file_name: fileNames,
 		});
@@ -111,29 +112,6 @@ exports.findAll = (req, res) => {
 	}
 };
 
-exports.delete = (req, res) => {
-	if (!req.session.autenticated)
-		return res
-			.status(401)
-			.send({ status: "FAILURE", authorized: false, message: "Unauthorized" });
-
-	const { fcyCustomerId } = req.params;
-
-	Str_List.remove(fcyCustomerId, (err) => {
-		if (err) {
-			const result =
-				err.result === "not_found"
-					? res
-							.status(404)
-							.send({ message: `Not found customer with id ${fcyCustomerId}` })
-					: res.status(500).send({
-							message: `Could not delete customer with id ${fcyCustomerId}`,
-					  });
-			return result;
-		} else return res.send({ message: "FCY Customer  deleted successfully!" });
-	});
-};
-
 exports.updateCustomer = (req, res) => {
 	if (!req.session.autenticated)
 		return res
@@ -176,6 +154,33 @@ exports.updateCustomer = (req, res) => {
 				});
 		}
 	);
+};
+
+exports.delete = (req, res) => {
+	if (req.session.autenticated) {
+		console.log(
+			"bo resource can delete Account Holder " + req.session.userCanDelete
+		);
+		const { accountHolderId } = req.params;
+
+		Str_List.remove(accountHolderId, (err) => {
+			if (err) {
+				err.result === "not_found"
+					? res.status(404).send({
+							message: `Not found  Account Holder with id ${accountHolderId}`,
+					  })
+					: res.status(500).send({
+							message: `Could not delete  Account Holder with id ${accountHolderId}`,
+					  });
+			} else
+				res.send({
+					message: " Account Holder deleted successfully!",
+				});
+		});
+	} else {
+		res.json({ authorized: false });
+	}
+	// else{ res.send({ message: "unauthorized access!" });}
 };
 
 exports.updateFile = (req, res) => {

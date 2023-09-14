@@ -13,6 +13,45 @@ function prominentCustomerLoan(prominent_customer) {
 	this.account_number = prominent_customer.account_number;
 }
 
+// check checkAccountNumberExists
+prominentCustomerLoan.checkAccountNumberExists = (account_number, result) => {
+	const checkSql = `SELECT * FROM ${tableName} WHERE account_number = ?`;
+	db.query(checkSql, [account_number], (err, res) => {
+		if (err) {
+			result(err, null);
+			return;
+		} else if (res.length > 0) {
+			// console.log("Account number already exists");
+			const errorMessage = "Account number already exists";
+			result(null, errorMessage);
+			return;
+		} else {
+			result(null, false);
+		}
+	});
+};
+
+// check checkAccountNumberExistsUpdate
+prominentCustomerLoan.checkAccountNumberExistsUpdate = (
+	id,
+	account_number,
+	result
+) => {
+	const checkSql = `SELECT * FROM ${tableName} WHERE account_number = ? AND id <> ?`;
+	db.query(checkSql, [account_number, id], (err, res) => {
+		if (err) {
+			result(err, null);
+			return;
+		} else if (res.length > 0) {
+			// console.log("Account number already exists");
+			const errorMessage = "Account number already exists";
+			result(null, errorMessage);
+			return;
+		} else {
+			result(null, false);
+		}
+	});
+};
 // create new potential customer
 prominentCustomerLoan.create = (prominent_customer, result) => {
 	const sql = `INSERT INTO ${tableName} SET ?`;

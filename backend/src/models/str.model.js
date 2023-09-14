@@ -9,6 +9,7 @@ function strList(str_list) {
 	this.customer_branch = str_list.customer_branch;
 	this.branch = str_list.branch;
 	this.customer_id = str_list.customer_id;
+	// this.typeofAccount = str_list.typeofAccount;
 	this.customer_name = str_list.customer_name;
 	this.account_number = str_list.account_number;
 	this.transaction_id = str_list.transaction_id;
@@ -102,7 +103,7 @@ strList.getAll = (
 
 strList.remove = (id, result) => {
 	const sql = `DELETE FROM ${tableName} WHERE id = ?  `;
-	db.query(sql, id, branch_code, (err, res) => {
+	db.query(sql, id, (err, res) => {
 		if (err) {
 			result(null, err);
 			return;
@@ -125,7 +126,7 @@ strList.updateById = (
 	branch,
 	result
 ) => {
-	const sql = `UPDATE ${tableName} SET user_id = ?,customer_branch = ?,branch = ?, customer_name = ?,  customer_id = ?, account_number = ?,transaction_id=?,reason=?,address=? WHERE id = ? `;
+	const sql = `UPDATE ${tableName} SET user_id = ?,customer_branch = ?,branch = ?, customer_name = ?,  customer_id = ?,   account_number = ?,transaction_id=?,reason=?,address=? WHERE id = ? `;
 	console.log("customer log from front sql ", customer);
 
 	db.query(
@@ -136,6 +137,7 @@ strList.updateById = (
 			branch,
 			customer.customer_name,
 			customer.customer_id,
+			// customer.typeofAccount,
 			customer.account_number,
 			customer.transaction_id,
 			customer.reason,

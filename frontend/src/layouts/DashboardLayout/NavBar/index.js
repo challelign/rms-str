@@ -169,6 +169,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
 	const [IBDLogged, SetIBDLogged] = useState(false);
 	const branch = localStorage.getItem("branch");
 	const position = localStorage.getItem("position");
+	const first_name = localStorage.getItem("first_name");
 
 	useEffect(() => {
 		document.body.style.zoom = 0.95;
@@ -238,6 +239,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
 						color="textPrimary"
 						variant="h5"
 					>
+						{/* {first_name}  */}
 						{position}
 					</Typography>
 					<Typography

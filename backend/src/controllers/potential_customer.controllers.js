@@ -6,9 +6,13 @@ exports.create = (req, res) => {
 
 	// create new customer
 	const potential_customer = new PotentialCustomer({
+		user_id: req.session.user_id,
+		branch_code: req.session.branch_code,
+		branch: req.session.branch,
 		company_name: req.body.company_name,
 		contact_person: req.body.contact_person,
 		organization_type: req.body.organization_type,
+		isProminent: req.body.isProminent,
 		phone: req.body.phone,
 		address: req.body.address,
 	});

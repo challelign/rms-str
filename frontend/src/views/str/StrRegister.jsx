@@ -16,7 +16,8 @@ import {
 import Alert from "@material-ui/lab/Alert";
 import { url } from "../../url";
 import { AxiosError } from "axios";
-
+import reasonOfSuspicious from "../constants/reasonOfSuspicious ";
+// import typeofAccount from "../constants/typeofAccount";
 import { CloudUpload as CloudUploadIcon } from "@material-ui/icons";
 
 const StrRegister = (props) => {
@@ -30,6 +31,7 @@ const StrRegister = (props) => {
 		account_number: "",
 		transaction_id: "",
 		customer_id: "",
+		// typeofAccount: "",
 		reason: "",
 		address: "",
 	});
@@ -65,6 +67,7 @@ const StrRegister = (props) => {
 		formData.append("customer_name", values.customer_name);
 		formData.append("transaction_id", values.transaction_id);
 		formData.append("customer_id", values.customer_id);
+		// formData.append("typeofAccount", values.typeofAccount);
 		formData.append("reason", values.reason);
 		formData.append("address", values.address);
 		formData.append("account_number", values.account_number);
@@ -72,11 +75,14 @@ const StrRegister = (props) => {
 		if (values.customer_id.trim() === "") {
 			setErrorMessage("Please provide Customer ID");
 		} else if (values.customer_name.trim() === "") {
-			setErrorMessage("Please provide Customer Name");
+			setErrorMessage("Please provide Account Holder Name");
 		} else if (values.transaction_id.trim() === "") {
 			setErrorMessage("Please provide Transaction Id");
 		} else if (values.reason.trim() === "") {
-			setErrorMessage("Please provide reason");
+			/* 	else if (values.typeofAccount.trim() === "") {
+			setErrorMessage("Please Select Account type");
+		}  */
+			setErrorMessage("Please Select reason");
 		} else if (values.address.trim() === "") {
 			setErrorMessage("Please provide address");
 		} else if (values.account_number.trim() === "") {
@@ -153,13 +159,6 @@ const StrRegister = (props) => {
 			enctype="multipart/form-data"
 		>
 			<Card>
-				{errorMessage !== "" ? (
-					<div className="error">
-						<Alert severity="warning">{errorMessage}</Alert>
-					</div>
-				) : (
-					""
-				)}
 				<CardHeader title="Suspicious Transaction registration (Upload ZIP File only) " />
 				<Divider />
 				<CardContent>
@@ -178,7 +177,7 @@ const StrRegister = (props) => {
 						<Grid item md={6} xs={12}>
 							<TextField
 								fullWidth
-								label="Full Name"
+								label="Account  Holder Name"
 								name="customer_name"
 								readOnly={false}
 								onChange={handleChange}
@@ -200,6 +199,32 @@ const StrRegister = (props) => {
 							<p>Account Length Should be 16 Long </p>
 							<p>Current Length {values.account_number.length}</p>
 						</Grid>
+
+						{/* 	<Grid item md={6} xs={12}>
+							<TextField
+								fullWidth
+								label="Account Type"
+								name="typeofAccount"
+								onChange={handleChange}
+								required
+								select
+								error={
+									values.actions === -1
+										? values.inputError
+											? true
+											: false
+										: ""
+								}
+								SelectProps={{ native: true }}
+								variant="outlined"
+							>
+								{typeofAccount.map((option) => (
+									<option key={option.value} value={option.value}>
+										{option.label}
+									</option>
+								))}
+							</TextField>
+						</Grid> */}
 						<Grid item md={6} xs={12}>
 							<TextField
 								fullWidth
@@ -222,7 +247,7 @@ const StrRegister = (props) => {
 								variant="outlined"
 							/>
 						</Grid>
-						<Grid item md={6} xs={12}>
+						{/* <Grid item md={6} xs={12}>
 							<TextField
 								multiline
 								rows={4}
@@ -234,9 +259,34 @@ const StrRegister = (props) => {
 								aria-label="minimum height"
 								variant="outlined"
 							/>
+						</Grid> */}
+						<Grid item md={6} xs={12}>
+							<TextField
+								fullWidth
+								label="Reason Of Suspicious"
+								name="reason"
+								onChange={handleChange}
+								required
+								select
+								error={
+									values.actions === -1
+										? values.inputError
+											? true
+											: false
+										: ""
+								}
+								SelectProps={{ native: true }}
+								variant="outlined"
+							>
+								{reasonOfSuspicious.map((option) => (
+									<option key={option.value} value={option.value}>
+										{option.label}
+									</option>
+								))}
+							</TextField>
 						</Grid>
-						<Grid item md={6} xs={12}></Grid>
 					</Grid>
+
 					<CardHeader title="Supported Documents like Opening Form, Copy of ID , Trade License , TIN and more (ZIP file only) " />
 					<Grid container spacing={2} alignItems="center">
 						<Grid item>
@@ -286,7 +336,13 @@ const StrRegister = (props) => {
 						</Grid>
 					</Grid>
 				</CardContent>
-
+				{errorMessage !== "" ? (
+					<div className="error">
+						<Alert severity="warning">{errorMessage}</Alert>
+					</div>
+				) : (
+					""
+				)}
 				<Divider />
 				<Box display="flex" justifyContent="flex-end" p={2}>
 					<Button color="primary" variant="contained" type="submit">
