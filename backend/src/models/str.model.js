@@ -37,7 +37,7 @@ strList.search = (page, countPerPage, searchInput, branch_code, result) => {
 	console.log("search input is " + searchInput);
 	console.log("cout per page  is " + countPerPage);
 	const pageCount = page * countPerPage;
-	const sql = `SELECT * FROM ${tableName} WHERE  (customer_name LIKE ? OR account_number LIKE ?) AND customer_branch = ?  ORDER BY id DESC LIMIT ${pageCount}, ${countPerPage}`;
+	const sql = `SELECT * , TIMESTAMPDIFF(HOUR, created_at, NOW()) AS created_at_hours FROM ${tableName} WHERE  (customer_name LIKE ? OR account_number LIKE ?) AND customer_branch = ?  ORDER BY id DESC LIMIT ${pageCount}, ${countPerPage}`;
 	var count = `SELECT COUNT(*) AS totalCount FROM ${tableName} WHERE  (customer_name LIKE ? OR account_number LIKE ?) AND customer_branch = ?`;
 
 	db.query(
@@ -75,8 +75,11 @@ strList.getAll = (
 	branch_code,
 	result
 ) => {
+	// const serverTime = new Date();
+
+	// const currentHour = serverTime.getHours();
 	const pageCount = page * countPerPage;
-	const sql = `SELECT * FROM ${tableName} WHERE customer_branch = ? ORDER BY id DESC LIMIT ${pageCount}, ${countPerPage}`;
+	const sql = `SELECT *, TIMESTAMPDIFF(HOUR, created_at, NOW())  AS created_at_hours FROM ${tableName} WHERE customer_branch = ? ORDER BY id DESC LIMIT ${pageCount}, ${countPerPage}`;
 	var count = `SELECT COUNT(*) AS totalCount FROM ${tableName} WHERE customer_branch = ?`;
 	console.log(sql);
 	db.query(count, [branch_code], (err, resCount) => {

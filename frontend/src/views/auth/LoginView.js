@@ -35,7 +35,8 @@ const LoginView = () => {
 	const submitHandler = (e) => {
 		e.preventDefault();
 		Login(details);
-		console.log("login details are " + details.name, details.password);
+		// console.log("login details are " + details.name, details.password);
+		console.log("login details are " + details.name);
 	};
 	const [user, setUser] = useState({ name: "", email: "" });
 	const [ResponseMessage, setResponseMessage] = useState("");

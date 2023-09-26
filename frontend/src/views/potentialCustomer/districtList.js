@@ -7,6 +7,10 @@ const districtList = [
 		label: "Head Office",
 	},
 	{
+		value: "Adama District",
+		label: "Adama District",
+	},
+	{
 		value: "Bahirdar District",
 		label: "Bahirdar District",
 	},
@@ -15,15 +19,13 @@ const districtList = [
 		label: "Dessie District",
 	},
 	{
-		value: "North and East Addis District",
-		label: "North and East Addis District",
+		value: "Dire Dawa District",
+		label: "Dire Dawa District",
 	},
-
 	{
-		value: "South and West Addis Distict",
-		label: "South and West Addis Distict",
+		value: "Debre Birhan District",
+		label: "Debre Birhan District",
 	},
-
 	{
 		value: "Gonder District",
 		label: "Gonder District",
@@ -34,8 +36,13 @@ const districtList = [
 		label: "Hawassa District",
 	},
 	{
-		value: "Dire Dawa District",
-		label: "Dire Dawa District",
+		value: "North and East Addis District",
+		label: "North and East Addis District",
+	},
+
+	{
+		value: "South and West Addis Distict",
+		label: "South and West Addis Distict",
 	},
 ];
 

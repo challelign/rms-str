@@ -379,6 +379,7 @@ const StrList = () => {
 		},
 		{
 			name: "Created Date",
+			// selector: (row) => row.created_at_hours,
 			selector: (row) =>
 				row.id != null ? moment(row.created_at).format("MMM Do YY") : "",
 		},
@@ -449,10 +450,10 @@ const StrList = () => {
 		{
 			name: "Upload File",
 			cell: (row) => {
-				const createdDate = moment().diff(moment(row.created_at), "hours");
+				// const createdDate = moment().diff(moment(row.created_at), "hours");
 
 				if (row.id != null) {
-					if (createdDate < 2) {
+					if (row.created_at_hours < 3) {
 						return (
 							<Button
 								color="primary"
@@ -483,10 +484,10 @@ const StrList = () => {
 		{
 			name: "Edit",
 			cell: (row) => {
-				const createdDate = moment().diff(moment(row.created_at), "hours");
+				// const createdDate = moment().diff(moment(row.created_at), "hours");
 
 				if (row.id != null) {
-					if (createdDate < 2) {
+					if (row.created_at_hours < 3) {
 						return (
 							<Button
 								color="primary"
@@ -519,10 +520,10 @@ const StrList = () => {
 		{
 			name: "Delete",
 			cell: (row) => {
-				const createdDate = moment().diff(moment(row.created_at), "hours");
+				// const createdDate = moment().diff(moment(row.created_at), "hours");
 
 				if (row.id != null) {
-					if (createdDate < 2) {
+					if (row.created_at_hours < 3) {
 						return (
 							<Button onClick={() => deleteClicked(row.id, row.customer_name)}>
 								<DeleteIcon style={{ fill: "#00094B" }} />
