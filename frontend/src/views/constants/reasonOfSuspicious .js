@@ -2,9 +2,18 @@ const reasonOfSuspicious = [
 	{
 		value: "-1",
 	},
+
 	{
-		value: "Illegal Hawal ",
-		label: "Illegal Hawal ",
+		value: "Human Trafficking",
+		label: "Human Trafficking",
+	},
+	{
+		value: "Fraud",
+		label: "Fraud",
+	},
+	{
+		value: "Illegal Hawal",
+		label: "Illegal Hawal",
 	},
 	{
 		value: "Corruption & bribery",

@@ -35,7 +35,7 @@ app.use(express.static("public"));
 app.use("/uploads", express.static("uploads"));
 
 // default route
-console.log("Test Log log..");
+// console.log("Test Log log..");
 app.get("/", (req, res) => {
 	res.json({ message: "Welcome to my application!" });
 });

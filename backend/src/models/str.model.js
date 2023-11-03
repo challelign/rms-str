@@ -14,6 +14,7 @@ function strList(str_list) {
 	this.account_number = str_list.account_number;
 	this.transaction_id = str_list.transaction_id;
 	this.reason = str_list.reason;
+	this.other_reason = str_list.other_reason;
 	this.address = str_list.address;
 	this.file_name = str_list.file_name;
 }
@@ -32,17 +33,24 @@ strList.create = (str_list, result) => {
 	});
 };
 
-strList.search = (page, countPerPage, searchInput, branch_code, result) => {
+strList.search = (
+	page,
+	countPerPage,
+	searchInput,
+	branch_code,
+	user_id,
+	result
+) => {
 	console.log("search page is " + page);
 	console.log("search input is " + searchInput);
 	console.log("cout per page  is " + countPerPage);
 	const pageCount = page * countPerPage;
-	const sql = `SELECT * , TIMESTAMPDIFF(HOUR, created_at, NOW()) AS created_at_hours FROM ${tableName} WHERE  (customer_name LIKE ? OR account_number LIKE ?) AND customer_branch = ?  ORDER BY id DESC LIMIT ${pageCount}, ${countPerPage}`;
-	var count = `SELECT COUNT(*) AS totalCount FROM ${tableName} WHERE  (customer_name LIKE ? OR account_number LIKE ?) AND customer_branch = ?`;
+	const sql = `SELECT * , TIMESTAMPDIFF(HOUR, created_at, NOW()) AS created_at_hours FROM ${tableName} WHERE  (customer_name LIKE ? OR account_number LIKE ?) AND customer_branch = ? and user_id = ? ORDER BY id DESC LIMIT ${pageCount}, ${countPerPage}`;
+	var count = `SELECT COUNT(*) AS totalCount FROM ${tableName} WHERE  (customer_name LIKE ? OR account_number LIKE ?) AND customer_branch = ? and user_id = ?`;
 
 	db.query(
 		count,
-		[searchInput + "%", searchInput + "%", branch_code],
+		[searchInput + "%", searchInput + "%", branch_code, user_id],
 		(err, resCount) => {
 			if (err) {
 				result(null, err);
@@ -51,7 +59,7 @@ strList.search = (page, countPerPage, searchInput, branch_code, result) => {
 
 			db.query(
 				sql,
-				[searchInput + "%", searchInput + "%", branch_code],
+				[searchInput + "%", searchInput + "%", branch_code, user_id],
 				(err, res) => {
 					if (err) {
 						result(null, err);
@@ -73,22 +81,23 @@ strList.getAll = (
 	countPerPage,
 	BOResourceLoggedIn,
 	branch_code,
+	user_id,
 	result
 ) => {
 	// const serverTime = new Date();
 
 	// const currentHour = serverTime.getHours();
 	const pageCount = page * countPerPage;
-	const sql = `SELECT *, TIMESTAMPDIFF(HOUR, created_at, NOW())  AS created_at_hours FROM ${tableName} WHERE customer_branch = ? ORDER BY id DESC LIMIT ${pageCount}, ${countPerPage}`;
-	var count = `SELECT COUNT(*) AS totalCount FROM ${tableName} WHERE customer_branch = ?`;
-	console.log(sql);
-	db.query(count, [branch_code], (err, resCount) => {
+	const sql = `SELECT *, TIMESTAMPDIFF(HOUR, created_at, NOW())  AS created_at_hours FROM ${tableName} WHERE customer_branch = ? and user_id = ? ORDER BY id DESC LIMIT ${pageCount}, ${countPerPage}`;
+	var count = `SELECT COUNT(*) AS totalCount FROM ${tableName} WHERE customer_branch = ? and user_id = ?`;
+	console.log("sql get all w user_id", sql);
+	db.query(count, [branch_code, user_id], (err, resCount) => {
 		if (err) {
 			result(null, err);
 			return;
 		}
 
-		db.query(sql, [branch_code], (err, res) => {
+		db.query(sql, [branch_code, user_id], (err, res) => {
 			if (err) {
 				result(null, err);
 				return;
@@ -129,7 +138,7 @@ strList.updateById = (
 	branch,
 	result
 ) => {
-	const sql = `UPDATE ${tableName} SET user_id = ?,customer_branch = ?,branch = ?, customer_name = ?,  customer_id = ?,   account_number = ?,transaction_id=?,reason=?,address=? WHERE id = ? `;
+	const sql = `UPDATE ${tableName} SET user_id = ?,customer_branch = ?,branch = ?, customer_name = ?,  customer_id = ?,   account_number = ?,transaction_id=?,reason=?,other_reason=?,address=? WHERE id = ? `;
 	console.log("customer log from front sql ", customer);
 
 	db.query(
@@ -144,6 +153,8 @@ strList.updateById = (
 			customer.account_number,
 			customer.transaction_id,
 			customer.reason,
+			customer.other_reason,
+
 			customer.address,
 			id,
 		],

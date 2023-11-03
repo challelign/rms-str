@@ -29,14 +29,14 @@ const DetailStrCustomer = ({ values }) => {
 
 				<Card>
 					<CardContent>
-						<Typography gutterBottom variant="h5" component="div">
+						<Typography gutterBottom variant="h4" component="div">
 							Account Holder Name
 						</Typography>
 						<Typography variant="body2" color="text.secondary">
 							{values.customer_name}
 						</Typography>
 						<Divider />
-						<Typography gutterBottom variant="h5" component="div">
+						<Typography gutterBottom variant="h4" component="div">
 							Customer Account Number
 						</Typography>
 						<Typography variant="body2" color="text.secondary">
@@ -45,35 +45,43 @@ const DetailStrCustomer = ({ values }) => {
 								: "Account Number not registered "}
 						</Typography>
 						<Divider />
-						<Typography gutterBottom variant="h5" component="div">
+						<Typography gutterBottom variant="h4" component="div">
 							Customer Address
 						</Typography>
 						<Typography variant="body2" color="text.secondary">
 							{values.address}
 						</Typography>
 						<Divider />
-						<Typography gutterBottom variant="h5" component="div">
+						<Typography gutterBottom variant="h4" component="div">
 							Customer Transaction ID
 						</Typography>
 						<Typography variant="body2" color="text.secondary">
 							{values.transaction_id}
 						</Typography>
 						<Divider />
-						<Typography gutterBottom variant="h5" component="div">
+						<Typography gutterBottom variant="h4" component="div">
 							Customer ID
 						</Typography>
 						<Typography variant="body2" color="text.secondary">
 							{values.customer_id}
 						</Typography>
 						<Divider />
-						<Typography gutterBottom variant="h5" component="div">
+						<Typography gutterBottom variant="h4" component="div">
 							Reason For Suspicious
 						</Typography>
 						<Typography variant="body2" color="text.secondary">
 							{values.reason}
 						</Typography>
 						<Divider />
-						{/* <Typography gutterBottom variant="h5" component="div">
+
+						<Typography gutterBottom variant="h4" component="div">
+							{values.other_reason !== "" ? "Other Reason For Suspicious" : ""}
+						</Typography>
+						<Typography variant="body2" color="text.secondary">
+							{values.other_reason}
+						</Typography>
+						<Divider />
+						{/* <Typography gutterBottom variant="h4" component="div">
 							Account Type
 						</Typography>
 						<Typography variant="body2" color="text.secondary">
@@ -81,7 +89,7 @@ const DetailStrCustomer = ({ values }) => {
 						</Typography>
 						<Divider />
  */}
-						<Typography gutterBottom variant="h5" component="div">
+						<Typography gutterBottom variant="h4" component="div">
 							Supported Documents (
 							{singleFile.length > 1 ? singleFile.length : ""})
 						</Typography>

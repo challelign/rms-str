@@ -91,12 +91,12 @@ const items = [
 		id: 7,
 	},
 
-	{
-		href: "/rms2/app/str",
-		icon: TransferWithinAStationIcon,
-		title: "STR-Suspicious T.",
-		id: 7.1,
-	},
+	// {
+	// 	href: "/rms2/app/str",
+	// 	icon: TransferWithinAStationIcon,
+	// 	title: "STR-Suspicious T.",
+	// 	id: 7.1,
+	// },
 
 	{
 		href: "/rms2/app/potential_customer_list",
@@ -170,6 +170,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
 	const branch = localStorage.getItem("branch");
 	const position = localStorage.getItem("position");
 	const first_name = localStorage.getItem("first_name");
+	const user_id = localStorage.getItem("user_id");
 
 	useEffect(() => {
 		document.body.style.zoom = 0.95;

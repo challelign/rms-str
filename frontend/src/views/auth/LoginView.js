@@ -69,6 +69,7 @@ const LoginView = () => {
 							localStorage.setItem("branch", login.data.branch);
 							localStorage.setItem("position", login.data.position);
 							localStorage.setItem("first_name", login.data.first_name);
+							localStorage.setItem("user_id", login.data.user_id);
 
 							if (login.data.BOResourceLogged) {
 								setBOResourceLogged(true);
@@ -107,6 +108,8 @@ const LoginView = () => {
 					localStorage.setItem("branch", authorized.data.branch);
 					localStorage.setItem("position", authorized.data.position);
 					localStorage.setItem("first_name", authorized.data.first_name);
+					localStorage.setItem("user_id", authorized.data.user_id);
+
 					if (authorized.data.BOResourceLogged) {
 						setBOResourceLogged(true);
 					} else {
@@ -187,7 +190,7 @@ const LoginView = () => {
 										) : (
 											""
 										)}
-										<b>Sign in To ABAY- RMS OR STR</b>
+										<b>Sign in To ABAY- RMS</b>
 									</Typography>
 									<Typography
 										style={{ textAlign: "center" }}

@@ -34,6 +34,7 @@ exports.create = (req, res) => {
 			account_number: req.body.account_number,
 			transaction_id: req.body.transaction_id,
 			reason: req.body.reason,
+			other_reason: req.body.other_reason,
 			// typeofAccount: req.body.typeofAccount,
 			address: req.body.address,
 			file_name: fileNames,
@@ -83,6 +84,8 @@ exports.findAll = (req, res) => {
 			countPerPage,
 			searchInput,
 			req.session.branch_code,
+			req.session.user_id,
+
 			(err, data) => {
 				if (err)
 					return res.status(500).send({
@@ -99,6 +102,7 @@ exports.findAll = (req, res) => {
 			countPerPage,
 			BOResourceLoggedIn,
 			req.session.branch_code,
+			req.session.user_id,
 			(err, data) => {
 				if (err)
 					return res.status(500).send({
@@ -107,6 +111,7 @@ exports.findAll = (req, res) => {
 					});
 
 				res.send(data);
+				console.log(req.session.user_id);
 			}
 		);
 	}

@@ -103,6 +103,7 @@ const StrList = () => {
 		transaction_id: "",
 		customer_id: "",
 		reason: "",
+		other_reason: "",
 		file_name: "",
 		// typeofAccount: "",
 		created_at: "",
@@ -173,6 +174,7 @@ const StrList = () => {
 		transaction_id,
 		customer_id,
 		reason,
+		other_reason,
 		// typeofAccount,
 
 		created_at
@@ -188,6 +190,7 @@ const StrList = () => {
 			transaction_id: transaction_id,
 			customer_id: customer_id,
 			reason: reason,
+			other_reason: other_reason,
 			// typeofAccount: typeofAccount,
 			created_at: created_at,
 			// file_name: file_name,
@@ -204,6 +207,7 @@ const StrList = () => {
 		transaction_id,
 		customer_id,
 		reason,
+		other_reason,
 		created_at
 		// file_name
 	) => {
@@ -217,6 +221,7 @@ const StrList = () => {
 			transaction_id: transaction_id,
 			customer_id: customer_id,
 			reason: reason,
+			other_reason: other_reason,
 			created_at: created_at,
 			// file_name: file_name,
 		});
@@ -231,6 +236,7 @@ const StrList = () => {
 		transaction_id,
 		customer_id,
 		reason,
+		other_reason,
 		// typeofAccount,
 
 		file_name,
@@ -246,6 +252,7 @@ const StrList = () => {
 			transaction_id: transaction_id,
 			customer_id: customer_id,
 			reason: reason,
+			other_reason: other_reason,
 			// typeofAccount: typeofAccount,
 
 			file_name: file_name,
@@ -311,6 +318,8 @@ const StrList = () => {
 
 						account_number: values.account_number,
 						reason: values.reason,
+						other_reason: values.other_reason,
+
 						// typeofAccount: values.typeofAccount,
 					},
 					{ withCredentials: true }
@@ -400,6 +409,7 @@ const StrList = () => {
 
 								row.customer_id,
 								row.reason,
+								row.other_reason,
 								// row.typeofAccount,
 								row.file_name
 							)
@@ -499,7 +509,8 @@ const StrList = () => {
 										row.account_number,
 										row.transaction_id,
 										row.customer_id,
-										row.reason
+										row.reason,
+										row.other_reason
 										// row.typeofAccount
 									)
 								}
@@ -545,7 +556,7 @@ const StrList = () => {
 		setPaginationReset(true);
 
 		searchInput = event.target.value;
-		if (event.target.value.trim() != "") {
+		if (event.target.value.trim() !== "") {
 			searchRequested = true;
 			getStrList();
 		} else {
@@ -566,7 +577,8 @@ const StrList = () => {
 		account_number,
 		transaction_id,
 		customer_id,
-		reason
+		reason,
+		other_reason
 	) => {
 		myRefname.current.click();
 		window.$updateId = id;
@@ -576,6 +588,7 @@ const StrList = () => {
 		window.$transaction_id = transaction_id;
 		window.$customer_id = customer_id;
 		window.$reason = reason;
+		window.$other_reason = other_reason;
 
 		console.log(id + " " + transaction_id);
 	};
@@ -641,7 +654,8 @@ const StrList = () => {
 	return (
 		<Page
 			className={classes.root}
-			title="Suspicious Transaction List "
+			// title="Suspicious Transaction List "
+			title={""}
 			breadcrumbs={[{ name: "Forms", active: true }]}
 		>
 			{isLoggedIn ? (
@@ -870,20 +884,6 @@ const StrList = () => {
 														value={values.transaction_id}
 													/>
 												</Grid>
-												{/* <Grid item md={6} xs={12}>
-													<TextField
-														multiline
-														rows={4}
-														fullWidth
-														label="Reason Of Suspicious"
-														name="reason"
-														readOnly={false}
-														onChange={handleChange}
-														aria-label="minimum height"
-														variant="outlined"
-														value={values.reason}
-													/>
-												</Grid> */}
 
 												<Grid item md={6} xs={12}>
 													<TextField
@@ -908,12 +908,26 @@ const StrList = () => {
 															<option
 																key={option.value}
 																value={option.value}
-																selected={values.reason == option.value}
+																selected={values.reason === option.value}
 															>
 																{option.label}
 															</option>
 														))}
 													</TextField>
+												</Grid>
+												<Grid item md={6} xs={12}>
+													<TextField
+														multiline
+														rows={4}
+														fullWidth
+														label="Other Reason"
+														name="other_reason"
+														readOnly={false}
+														onChange={handleChange}
+														aria-label="minimum height"
+														variant="outlined"
+														value={values.other_reason}
+													/>
 												</Grid>
 											</Grid>
 										</CardContent>

@@ -41,6 +41,7 @@ exports.login = (req, resp) => {
 						branch: res.data.branch,
 						position: res.data.position,
 						first_name: res.data.first_name,
+						user_id: res.data.userid,
 					});
 				} else if (res.data.branch_type == "BR") {
 					req.session.autenticated = true;
@@ -65,6 +66,7 @@ exports.login = (req, resp) => {
 						branch: res.data.branch,
 						position: res.data.position,
 						first_name: res.data.first_name,
+						user_id: res.data.userid,
 					});
 				} else if (res.data.Group.IBD) {
 					console.log("ibd has logged");
@@ -80,6 +82,8 @@ exports.login = (req, resp) => {
 							res.data.position,
 							res.data.branch_code,
 							res.data.branch,
+							res.data.userid,
+
 							(err, data) => {}
 						);
 					}
@@ -93,6 +97,7 @@ exports.login = (req, resp) => {
 						branch: res.data.branch,
 						position: res.data.position,
 						first_name: res.data.first_name,
+						user_id: res.data.userid,
 					});
 				} else {
 					resp.json({
@@ -123,6 +128,7 @@ exports.isAutorized = (req, resp) => {
 			position: req.session.position,
 			branch_code: req.session.branch_code, // this code added by chalie
 			first_name: req.session.first_name, // this code added by chalie
+			// user_id: req.data.userid,
 		});
 	} else {
 		resp.json({ authorized: false });

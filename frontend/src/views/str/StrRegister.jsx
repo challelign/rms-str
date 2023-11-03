@@ -33,6 +33,7 @@ const StrRegister = (props) => {
 		customer_id: "",
 		// typeofAccount: "",
 		reason: "",
+		other_reason: "",
 		address: "",
 	});
 	const handleFileChange = (event) => {
@@ -70,6 +71,8 @@ const StrRegister = (props) => {
 		// formData.append("typeofAccount", values.typeofAccount);
 		formData.append("reason", values.reason);
 		formData.append("address", values.address);
+		formData.append("other_reason", values.other_reason);
+
 		formData.append("account_number", values.account_number);
 
 		if (values.customer_id.trim() === "") {
@@ -77,7 +80,7 @@ const StrRegister = (props) => {
 		} else if (values.customer_name.trim() === "") {
 			setErrorMessage("Please provide Account Holder Name");
 		} else if (values.transaction_id.trim() === "") {
-			setErrorMessage("Please provide Transaction Id");
+			setErrorMessage("Please provide Transaction Reference No");
 		} else if (values.reason.trim() === "") {
 			/* 	else if (values.typeofAccount.trim() === "") {
 			setErrorMessage("Please Select Account type");
@@ -239,7 +242,7 @@ const StrRegister = (props) => {
 						<Grid item md={6} xs={12}>
 							<TextField
 								fullWidth
-								label="Transaction Id"
+								label="Transaction Reference No"
 								name="transaction_id"
 								readOnly={false}
 								onChange={handleChange}
@@ -247,19 +250,7 @@ const StrRegister = (props) => {
 								variant="outlined"
 							/>
 						</Grid>
-						{/* <Grid item md={6} xs={12}>
-							<TextField
-								multiline
-								rows={4}
-								fullWidth
-								label="Reason Of Suspicious"
-								name="reason"
-								readOnly={false}
-								onChange={handleChange}
-								aria-label="minimum height"
-								variant="outlined"
-							/>
-						</Grid> */}
+
 						<Grid item md={6} xs={12}>
 							<TextField
 								fullWidth
@@ -284,6 +275,19 @@ const StrRegister = (props) => {
 									</option>
 								))}
 							</TextField>
+						</Grid>
+						<Grid item md={6} xs={12}>
+							<TextField
+								multiline
+								rows={2}
+								fullWidth
+								label="Other Reason"
+								name="other_reason"
+								readOnly={false}
+								onChange={handleChange}
+								aria-label="minimum height"
+								variant="outlined"
+							/>
 						</Grid>
 					</Grid>
 

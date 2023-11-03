@@ -31,7 +31,7 @@ const routes = [
 			{ path: "below_100_dormant", element: <DormantCoustomerBelow100 /> },
 			{ path: "below_500_thusand", element: <Below500List /> },
 			{ path: "fcy", element: <Fcy /> },
-			{ path: "str", element: <StrList /> },
+			// { path: "str", element: <StrList /> },
 			{
 				path: "potential_customer_status",
 				element: <PotentialCustomerStatus />,
