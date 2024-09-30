@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import AddIcon from "@material-ui/icons/Add";
 import {
 	Container,
 	makeStyles,
@@ -10,7 +9,6 @@ import {
 	Divider,
 	Grid,
 	TextField,
-	Typography,
 	Box,
 } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
@@ -25,9 +23,8 @@ import Page from "../../components/Page";
 import EditIcon from "@material-ui/icons/Edit";
 import axios from "axios";
 
-import { Navigate, json } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { url } from "../../url";
-import { BatchUrl } from "../../batchExcuteURL";
 
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Dialog from "@material-ui/core/Dialog";
@@ -35,7 +32,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import ViewListIcon from "@material-ui/icons/ViewList";
 import Slide from "@material-ui/core/Slide";
 import DeleteIcon from "@material-ui/icons/Delete";
 
@@ -43,6 +39,7 @@ import Alert from "@material-ui/lab/Alert";
 import RegistrationProminentCustomer from "./RegistrationProminentCustomer";
 import Autocomplete from "@material-ui/lab/Autocomplete/Autocomplete";
 import { AxiosError } from "axios";
+import loanDepositType from "../constants/loanDepositType";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
@@ -89,6 +86,7 @@ const ProminentCustomer = ({}) => {
 		amount_in_fcy: "",
 		amount_in_etb: "",
 		remark: "",
+		loan_based: "",
 		prominent_potential_customers_id: "",
 	});
 
@@ -143,6 +141,10 @@ const ProminentCustomer = ({}) => {
 			selector: "account_number",
 		},
 		{
+			name: "Loan Based on",
+			selector: "loan_based",
+		},
+		{
 			name: "Edit ",
 			cell: (row) =>
 				row.id != null ? (
@@ -152,6 +154,7 @@ const ProminentCustomer = ({}) => {
 								row.id,
 								row.company_name,
 								row.account_number,
+								row.loan_based,
 								row.prominent_potential_customers_id
 							)
 						}
@@ -204,11 +207,16 @@ const ProminentCustomer = ({}) => {
 
 	const handleSubmitEdit = (event) => {
 		event.preventDefault();
-		// editFcyCustomer(); // Save  when form is submitted
-		// alert(company_name);
-
 		if (company_name === null || pro_pot_c_id === "") {
 			setErrorMessage2("Please provide company name");
+			return;
+		} else if (
+			values.loan_based === "" ||
+			values.loan_based === null ||
+			values.loan_based === "-1"
+		) {
+			setErrorMessage2("Please provide loan based on type");
+			return;
 		} else if (values.account_number.trim() === "") {
 			setErrorMessage2("Please provide Account number");
 			return;
@@ -220,13 +228,6 @@ const ProminentCustomer = ({}) => {
 			setErrorMessage2("Account number length must be 16 digit.");
 			return;
 		} else {
-			// alert(company_name.company_name);
-			// alert(company_name.id);
-			// alert(pro_pot_c_id);
-			// console.log("company_name, ", company_name.company_name);
-			// console.log("company_id, ", company_name.id);
-			// console.log("account_number ", values.account_number);
-			// console.log("updateID ", updateID);
 			let company_id;
 			if (pro_pot_c_id >= 0) {
 				company_id = pro_pot_c_id;
@@ -235,14 +236,13 @@ const ProminentCustomer = ({}) => {
 				company_id = company_name.id;
 			}
 
-			// alert(company_id);
-			// return;
 			axios
 				.put(
 					url + "/prominent_customer/" + updateID,
 					{
 						account_number: values.account_number,
 						company_name: company_id,
+						loan_based: values.loan_based,
 
 						// company_name: company_name.company_name,
 						// company_name: options.id,
@@ -295,6 +295,7 @@ const ProminentCustomer = ({}) => {
 		id,
 		company_name,
 		account_number,
+		loan_based,
 		prominent_potential_customers_id
 	) => {
 		console.log("id of clicke item =>", id);
@@ -310,12 +311,15 @@ const ProminentCustomer = ({}) => {
 			...values,
 			...company_name,
 			company_name: company_name,
+			loan_based: loan_based,
 			account_number: account_number,
 		});
 		setValues({
 			...values,
 			...company_name,
+			...loan_based,
 			company_name: company_name,
+			loan_based: loan_based,
 			account_number: account_number,
 			prominent_potential_customers_id: prominent_potential_customers_id,
 		});
@@ -538,7 +542,38 @@ const ProminentCustomer = ({}) => {
 													)}
 												/>
 											</Grid>
-
+											<Grid item md={12} xs={12}>
+												<TextField
+													fullWidth
+													label="Loan Based on"
+													name="loan_based"
+													onChange={handleChange}
+													required
+													select
+													error={
+														values.actions === -1
+															? values.inputError
+																? true
+																: false
+															: ""
+													}
+													SelectProps={{ native: true }}
+													variant="outlined"
+												>
+													{/* <option key={option.value} value={option.value}>
+														{option.label}
+													</option> */}
+													{loanDepositType.map((option) => (
+														<option
+															key={option.value}
+															value={option.value}
+															selected={values.loan_based === option.value}
+														>
+															{option.label}
+														</option>
+													))}
+												</TextField>
+											</Grid>
 											<Grid item md={12} xs={12}>
 												<TextField
 													fullWidth
@@ -570,7 +605,7 @@ const ProminentCustomer = ({}) => {
 										</Grid>
 										<Grid>
 											<Button variant="outlined" color="primary" type="submit">
-												Create
+												Update
 											</Button>
 										</Grid>
 									</Box>

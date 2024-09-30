@@ -1,13 +1,13 @@
-/*module.exports = {
-  HOST: "localhost",
-  USER: "admin",
-  PASSWORD: "admin123;",
-  DATABASE: "rmr",
-};*/
-
 module.exports = {
-	HOST: "localhost",
+	HOST: "10.1.85.10",
 	USER: "root",
-	PASSWORD: "",
+	PASSWORD: "123db?Server",
 	DATABASE: "rmr",
 };
+
+// module.exports = {
+// 	HOST: "localhost",
+// 	USER: "root",
+// 	PASSWORD: "chalie123",
+// 	DATABASE: "rmr",
+// };

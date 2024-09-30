@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import AddIcon from "@material-ui/icons/Add";
 import {
 	Container,
 	makeStyles,
@@ -10,7 +9,6 @@ import {
 	Divider,
 	Grid,
 	TextField,
-	Typography,
 	Box,
 } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
@@ -25,7 +23,7 @@ import Page from "../../components/Page";
 import EditIcon from "@material-ui/icons/Edit";
 import axios from "axios";
 
-import { Navigate, json } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { url } from "../../url";
 import { BatchUrl } from "../../batchExcuteURL";
 
@@ -35,7 +33,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import ViewListIcon from "@material-ui/icons/ViewList";
 import Slide from "@material-ui/core/Slide";
 import DeleteIcon from "@material-ui/icons/Delete";
 

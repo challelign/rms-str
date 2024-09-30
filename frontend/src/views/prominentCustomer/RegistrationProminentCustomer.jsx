@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Navigate } from "react-router-dom";
 import axios from "axios";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { AxiosError } from "axios";
@@ -10,13 +9,13 @@ import {
 	Card,
 	CardContent,
 	CardHeader,
-	DialogActions,
 	Divider,
 	Grid,
 	TextField,
 } from "@material-ui/core";
 import Alert from "@material-ui/lab/Alert";
 import { url } from "../../url";
+import loanDepositType from "../constants/loanDepositType";
 
 const RegistrationProminentCustomer = (props) => {
 	const [open, setOpen] = React.useState(false);
@@ -26,13 +25,25 @@ const RegistrationProminentCustomer = (props) => {
 	const [account_number, setaAcount_number] = useState("");
 
 	const [company_name, setCompany_name] = useState(null);
+	// const [loan_based, setLoan_based] = useState(null);
 
 	const [options, setOptions] = useState([]);
 	const [errorMessage, setErrorMessage] = useState("");
-
+	const [values, setValues] = useState({
+		// customer_name: "",
+		// account_number: "",
+		// // transaction_id: "",
+		// customer_id: "",
+		// // typeofAccount: "",
+		loan_based: "",
+		// other_reason: "",
+	});
 	const saveCustomer = () => {
 		if (company_name === null) {
 			setErrorMessage("Please provide company name");
+			return;
+		} else if (values.loan_based.trim() === "") {
+			setErrorMessage("Please provide loan based on type");
 			return;
 		} else if (account_number.trim() === "") {
 			setErrorMessage("Account number length must be 16 digit.");
@@ -40,17 +51,12 @@ const RegistrationProminentCustomer = (props) => {
 		} else if (account_number.length !== 16) {
 			setErrorMessage("Account number length must be 16 digit.");
 		} else {
-			// alert(
-			//   "account_number =>",
-			//   account_number,
-			//   "company_name=>",
-			//   company_name.id
-			// );
 			axios
 				.post(
 					url + "/prominent_customer",
 					{
 						account_number: account_number,
+						loan_based: values.loan_based,
 						// company_name: company_name.company_name,
 						company_name: company_name.id,
 					},
@@ -92,7 +98,12 @@ const RegistrationProminentCustomer = (props) => {
 				});
 		}
 	};
-
+	const handleChange = (event) => {
+		setValues({
+			...values,
+			[event.target.name]: event.target.value,
+		});
+	};
 	const handleSubmit = (event) => {
 		event.preventDefault();
 
@@ -116,6 +127,7 @@ const RegistrationProminentCustomer = (props) => {
 			});
 	}, []);
 
+	console.log(options);
 	return (
 		<form autoComplete="off" noValidate onSubmit={handleSubmit}>
 			<Card>
@@ -165,6 +177,31 @@ const RegistrationProminentCustomer = (props) => {
 							/>
 						</Grid>
 
+						<Grid item md={12} xs={12}>
+							<TextField
+								fullWidth
+								label="Loan Based on"
+								name="loan_based"
+								onChange={handleChange}
+								required
+								select
+								error={
+									values.actions === -1
+										? values.inputError
+											? true
+											: false
+										: ""
+								}
+								SelectProps={{ native: true }}
+								variant="outlined"
+							>
+								{loanDepositType.map((option) => (
+									<option key={option.value} value={option.value}>
+										{option.label}
+									</option>
+								))}
+							</TextField>
+						</Grid>
 						<Grid item md={12} xs={12}>
 							<TextField
 								fullWidth

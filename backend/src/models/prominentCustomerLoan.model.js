@@ -8,6 +8,7 @@ const tableName2 = "potential_customers";
 function prominentCustomerLoan(prominent_customer) {
 	this.user_id = prominent_customer.user_id;
 	this.branch_code = prominent_customer.branch_code;
+	this.loan_based = prominent_customer.loan_based;
 	this.branch = prominent_customer.branch;
 	this.company_name = prominent_customer.company_name;
 	this.account_number = prominent_customer.account_number;
@@ -78,6 +79,7 @@ prominentCustomerLoan.search = (
 	const pageCount = page * countPerPage;
 
 	const sql = `SELECT ${tableName}.id,
+                    ${tableName}.loan_based, 
                     ${tableName}.account_number,
                     ${tableName2}.company_name ,
                     ${tableName}.company_name as prominent_potential_customers_id,
@@ -160,6 +162,7 @@ prominentCustomerLoan.getAll = (
 
 	const sql = `SELECT ${tableName}.id, 
                     ${tableName}.account_number, 
+                    ${tableName}.loan_based, 
                     ${tableName2}.company_name, 
                     ${tableName}.company_name as prominent_potential_customers_id, 
                     ${tableName2}.id as potential_id
@@ -232,7 +235,7 @@ prominentCustomerLoan.updateById = (
 	branch,
 	result
 ) => {
-	const sql = `UPDATE ${tableName} SET user_id = ?, 	branch_code = ?, 	branch = ?, company_name = ?,  account_number = ?  WHERE id = ? `;
+	const sql = `UPDATE ${tableName} SET user_id = ?, 	branch_code = ?, 	branch = ?, company_name = ?,loan_based = ?,  account_number = ?  WHERE id = ? `;
 	console.log("customer log from front sql ", customer);
 
 	db.query(
@@ -242,6 +245,7 @@ prominentCustomerLoan.updateById = (
 			branch_code,
 			branch,
 			customer.company_name,
+			customer.loan_based,
 			customer.account_number,
 			id,
 		],

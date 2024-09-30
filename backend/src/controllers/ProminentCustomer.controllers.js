@@ -1,39 +1,6 @@
 // const FcyCustomer = require("../models/fcyCustomer.model");
 const ProminentCustomer = require("../models/prominentCustomerLoan.model");
 
-/* exports.create = (req, res) => {
-	// validate request
-	if (!req.body) res.status(400).send({ message: "Content can not be empty!" });
-
-	// create new customer
-	const prominentCustomer = new ProminentCustomer({
-		user_id: req.session.user_id,
-		branch_code: req.session.branch_code,
-		branch: req.session.branch,
-
-		// disbursed_loan: req.body.disbursed_loan,
-		company_name: req.body.company_name,
-		// borrowers_name: req.body.borrowers_name,
-		// district: req.body.district,
-
-		account_number: req.body.account_number,
-		// credit_amount: req.body.credit_amount,
-	});
-
-	// save customer in the database
-	ProminentCustomer.create(prominentCustomer, (err, data) => {
-		//if (req.session.BOResourceLogged) {
-		if (err)
-			res.status(500).send({
-				message:
-					err.message || "Some error occurred while creating the customer.",
-			});
-		else res.send({ message: "Customer was created successfully!", data });
-		//}
-	});
-};
- */
-
 exports.create = (req, res) => {
 	// validate request
 	if (!req.body) {
@@ -46,6 +13,7 @@ exports.create = (req, res) => {
 		user_id: req.session.user_id,
 		branch_code: req.session.branch_code,
 		branch: req.session.branch,
+		loan_based: req.body.loan_based,
 		account_number: req.body.account_number,
 		company_name: req.body.company_name,
 	});

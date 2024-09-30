@@ -1,7 +1,7 @@
 {
 	"name": "abay-rms",
 	"version": "0.1.0",
-	"homepage": "http://localhost/rms2/",
+	"homepage": "http://10.1.85.10/rms2/",
 	"private": true,
 	"dependencies": {
 		"@material-ui/core": "^4.12.4",

@@ -5,9 +5,9 @@ const LoggedUser = require("../models/logged_user.model");
 exports.login = (req, resp) => {
 	console.log(req.session.branch_code);
 	const { username, password } = req.body;
-
+	// 10.1.10.80
 	axios
-		.post("http://10.1.85.11/AbayERP/Webservices/wslogin", {
+		.post("http://10.1.10.80/AbayERP/Webservices/wslogin", {
 			username: username,
 			password: password,
 		})

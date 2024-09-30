@@ -10,6 +10,7 @@
 
 # production
 /build
+/rms2
 
 # misc
 .DS_Store
